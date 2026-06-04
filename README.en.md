@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/songquanpeng/one-api"><img src="https://raw.githubusercontent.com/songquanpeng/one-api/main/web/default/public/logo.png" width="150" height="150" alt="one-api logo"></a>
+  <a href="https://github.com/w-run/one-api"><img src="https://raw.githubusercontent.com/w-run/one-api/main/web/default/public/logo.png" width="150" height="150" alt="one-api logo"></a>
 </p>
 
 <div align="center">
@@ -15,20 +15,20 @@ _✨ Access all LLM through the standard OpenAI API format, easy to deploy & use
 </div>
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/songquanpeng/one-api/main/LICENSE">
-    <img src="https://img.shields.io/github/license/songquanpeng/one-api?color=brightgreen" alt="license">
+  <a href="https://raw.githubusercontent.com/w-run/one-api/main/LICENSE">
+    <img src="https://img.shields.io/github/license/w-run/one-api?color=brightgreen" alt="license">
   </a>
-  <a href="https://github.com/songquanpeng/one-api/releases/latest">
-    <img src="https://img.shields.io/github/v/release/songquanpeng/one-api?color=brightgreen&include_prereleases" alt="release">
+  <a href="https://github.com/w-run/one-api/releases/latest">
+    <img src="https://img.shields.io/github/v/release/w-run/one-api?color=brightgreen&include_prereleases" alt="release">
   </a>
-  <a href="https://hub.docker.com/repository/docker/justsong/one-api">
-    <img src="https://img.shields.io/docker/pulls/justsong/one-api?color=brightgreen" alt="docker pull">
+  <a href="https://hub.docker.com/repository/docker/demo629/one-api">
+    <img src="https://img.shields.io/docker/pulls/demo629/one-api?color=brightgreen" alt="docker pull">
   </a>
-  <a href="https://github.com/songquanpeng/one-api/releases/latest">
-    <img src="https://img.shields.io/github/downloads/songquanpeng/one-api/total?color=brightgreen&include_prereleases" alt="release">
+  <a href="https://github.com/w-run/one-api/releases/latest">
+    <img src="https://img.shields.io/github/downloads/w-run/one-api/total?color=brightgreen&include_prereleases" alt="release">
   </a>
-  <a href="https://goreportcard.com/report/github.com/songquanpeng/one-api">
-    <img src="https://goreportcard.com/badge/github.com/songquanpeng/one-api" alt="GoReportCard">
+  <a href="https://goreportcard.com/report/github.com/w-run/one-api">
+    <img src="https://goreportcard.com/badge/github.com/w-run/one-api" alt="GoReportCard">
   </a>
 </p>
 
@@ -37,11 +37,11 @@ _✨ Access all LLM through the standard OpenAI API format, easy to deploy & use
   ·
   <a href="#usage">Usage</a>
   ·
-  <a href="https://github.com/songquanpeng/one-api/issues">Feedback</a>
+  <a href="https://github.com/w-run/one-api/issues">Feedback</a>
   ·
   <a href="#screenshots">Screenshots</a>
   ·
-  <a href="https://openai.justsong.cn/">Live Demo</a>
+  <a href="https://openai.example.com/">Live Demo</a>
   ·
   <a href="#faq">FAQ</a>
   ·
@@ -89,7 +89,7 @@ _✨ Access all LLM through the standard OpenAI API format, easy to deploy & use
 ### Docker Deployment
 
 Deployment command:
-`docker run --name one-api -d --restart always -p 3000:3000 -e TZ=Asia/Shanghai -v /home/ubuntu/data/one-api:/data justsong/one-api`
+`docker run --name one-api -d --restart always -p 3000:3000 -e TZ=Asia/Shanghai -v /home/ubuntu/data/one-api:/data demo629/one-api`
 
 Update command: `docker run --rm -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower -cR`
 
@@ -100,7 +100,7 @@ Data will be saved in the `/home/ubuntu/data/one-api` directory on the host. Ens
 Nginx reference configuration:
 ```
 server{
-   server_name openai.justsong.cn;  # Modify your domain name accordingly
+   server_name openai.example.com;  # Modify your domain name accordingly
 
    location / {
           client_max_body_size  64m;
@@ -129,9 +129,9 @@ sudo service nginx restart
 The initial account username is `root` and password is `123456`.
 
 ### Manual Deployment
-1. Download the executable file from [GitHub Releases](https://github.com/songquanpeng/one-api/releases/latest) or compile from source:
+1. Download the executable file from [GitHub Releases](https://github.com/w-run/one-api/releases/latest) or compile from source:
    ```shell
-   git clone https://github.com/songquanpeng/one-api.git
+   git clone https://github.com/w-run/one-api.git
 
    # Build the frontend
    cd one-api/web/default
@@ -164,9 +164,9 @@ For more detailed deployment tutorials, please refer to [this page](https://iama
 Please refer to the [environment variables](#environment-variables) section for details on using environment variables.
 
 ### Deployment on Control Panels (e.g., Baota)
-Refer to [#175](https://github.com/songquanpeng/one-api/issues/175) for detailed instructions.
+Refer to [#175](https://github.com/w-run/one-api/issues/175) for detailed instructions.
 
-If you encounter a blank page after deployment, refer to [#97](https://github.com/songquanpeng/one-api/issues/97) for possible solutions.
+If you encounter a blank page after deployment, refer to [#97](https://github.com/w-run/one-api/issues/97) for possible solutions.
 
 ### Deployment on Third-Party Platforms
 <details>
@@ -216,7 +216,7 @@ Add your API Key on the `Channels` page, and then add an access token on the `To
 
 You can then use your access token to access One API. The usage is consistent with the [OpenAI API](https://platform.openai.com/docs/api-reference/introduction).
 
-In places where the OpenAI API is used, remember to set the API Base to your One API deployment address, for example: `https://openai.justsong.cn`. The API Key should be the token generated in One API.
+In places where the OpenAI API is used, remember to set the API Base to your One API deployment address, for example: `https://openai.example.com`. The API Key should be the token generated in One API.
 
 Note that the specific API Base format depends on the client you are using.
 
@@ -244,7 +244,7 @@ If the channel ID is not provided, load balancing will be used to distribute the
 4. `LOG_SQL_DSN`: When set, a separate database will be used for the `logs` table; please use MySQL or PostgreSQL.
     + Example: `LOG_SQL_DSN=root:123456@tcp(localhost:3306)/oneapi-logs`
 5. `FRONTEND_BASE_URL`: When set, the specified frontend address will be used instead of the backend address.
-    + Example: `FRONTEND_BASE_URL=https://openai.justsong.cn`
+    + Example: `FRONTEND_BASE_URL=https://openai.example.com`
 6. 'MEMORY_CACHE_ENABLED': Enabling memory caching can cause a certain delay in updating user quotas, with optional values of 'true' and 'false'. If not set, it defaults to 'false'.
 7. `SYNC_FREQUENCY`: When set, the system will periodically sync configurations from the database, with the unit in seconds. If not set, no sync will happen.
     + Example: `SYNC_FREQUENCY=60`

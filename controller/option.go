@@ -2,13 +2,15 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/songquanpeng/one-api/common/config"
-	"github.com/songquanpeng/one-api/common/helper"
-	"github.com/songquanpeng/one-api/common/i18n"
-	"github.com/songquanpeng/one-api/model"
+	"github.com/w-run/one-api/common/config"
+	"github.com/w-run/one-api/common/helper"
+	"github.com/w-run/one-api/common/i18n"
+	"github.com/w-run/one-api/model"
+	billingratio "github.com/w-run/one-api/relay/billing/ratio"
 
 	"github.com/gin-gonic/gin"
 )
@@ -99,4 +101,60 @@ func UpdateOption(c *gin.Context) {
 		"message": "",
 	})
 	return
+}
+
+func SyncModelRatios(c *gin.Context) {
+	var req struct {
+		URL string `json:"url"`
+	}
+	if err := json.NewDecoder(c.Request.Body).Decode(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "无效的参数",
+		})
+		return
+	}
+
+	url := strings.TrimSpace(req.URL)
+	if url == "" {
+		// Try to get from option map
+		config.OptionMapRWMutex.RLock()
+		url = config.OptionMap["ModelRatioSyncURL"]
+		config.OptionMapRWMutex.RUnlock()
+	}
+	if url == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "请先配置倍率同步地址（ModelRatioSyncURL）",
+		})
+		return
+	}
+
+	count, err := billingratio.SyncModelRatiosFromURL(url)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": fmt.Sprintf("同步失败：%s", err.Error()),
+		})
+		return
+	}
+
+	// Save updated ratios to DB
+	ratioJSON := billingratio.ModelRatio2JSONString()
+	if err := model.UpdateOption("ModelRatio", ratioJSON); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": fmt.Sprintf("同步成功但保存失败：%s", err.Error()),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "",
+		"data": gin.H{
+			"count":      count,
+			"modelRatio": ratioJSON,
+		},
+	})
 }

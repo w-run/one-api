@@ -3,12 +3,12 @@ package controller
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/songquanpeng/one-api/common/config"
-	"github.com/songquanpeng/one-api/common/ctxkey"
-	"github.com/songquanpeng/one-api/common/helper"
-	"github.com/songquanpeng/one-api/common/network"
-	"github.com/songquanpeng/one-api/common/random"
-	"github.com/songquanpeng/one-api/model"
+	"github.com/w-run/one-api/common/config"
+	"github.com/w-run/one-api/common/ctxkey"
+	"github.com/w-run/one-api/common/helper"
+	"github.com/w-run/one-api/common/network"
+	"github.com/w-run/one-api/common/random"
+	"github.com/w-run/one-api/model"
 	"net/http"
 	"strconv"
 )

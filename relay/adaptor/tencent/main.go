@@ -16,16 +16,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/songquanpeng/one-api/common"
-	"github.com/songquanpeng/one-api/common/conv"
-	"github.com/songquanpeng/one-api/common/ctxkey"
-	"github.com/songquanpeng/one-api/common/helper"
-	"github.com/songquanpeng/one-api/common/logger"
-	"github.com/songquanpeng/one-api/common/random"
-	"github.com/songquanpeng/one-api/common/render"
-	"github.com/songquanpeng/one-api/relay/adaptor/openai"
-	"github.com/songquanpeng/one-api/relay/constant"
-	"github.com/songquanpeng/one-api/relay/model"
+	"github.com/w-run/one-api/common"
+	"github.com/w-run/one-api/common/conv"
+	"github.com/w-run/one-api/common/ctxkey"
+	"github.com/w-run/one-api/common/helper"
+	"github.com/w-run/one-api/common/logger"
+	"github.com/w-run/one-api/common/random"
+	"github.com/w-run/one-api/common/render"
+	"github.com/w-run/one-api/relay/adaptor/openai"
+	"github.com/w-run/one-api/relay/constant"
+	"github.com/w-run/one-api/relay/model"
 )
 
 func ConvertRequest(request model.GeneralOpenAIRequest) *ChatRequest {

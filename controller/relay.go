@@ -8,17 +8,17 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/songquanpeng/one-api/common"
-	"github.com/songquanpeng/one-api/common/config"
-	"github.com/songquanpeng/one-api/common/ctxkey"
-	"github.com/songquanpeng/one-api/common/helper"
-	"github.com/songquanpeng/one-api/common/logger"
-	"github.com/songquanpeng/one-api/middleware"
-	dbmodel "github.com/songquanpeng/one-api/model"
-	"github.com/songquanpeng/one-api/monitor"
-	"github.com/songquanpeng/one-api/relay/controller"
-	"github.com/songquanpeng/one-api/relay/model"
-	"github.com/songquanpeng/one-api/relay/relaymode"
+	"github.com/w-run/one-api/common"
+	"github.com/w-run/one-api/common/config"
+	"github.com/w-run/one-api/common/ctxkey"
+	"github.com/w-run/one-api/common/helper"
+	"github.com/w-run/one-api/common/logger"
+	"github.com/w-run/one-api/middleware"
+	dbmodel "github.com/w-run/one-api/model"
+	"github.com/w-run/one-api/monitor"
+	"github.com/w-run/one-api/relay/controller"
+	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/one-api/relay/relaymode"
 )
 
 // https://platform.openai.com/docs/api-reference/chat

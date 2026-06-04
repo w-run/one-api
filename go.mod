@@ -1,4 +1,4 @@
-module github.com/songquanpeng/one-api
+module github.com/w-run/one-api
 
 go 1.20
 

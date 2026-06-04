@@ -1,26 +1,30 @@
 package openai
 
 import (
-	"github.com/songquanpeng/one-api/relay/adaptor/ai360"
-	"github.com/songquanpeng/one-api/relay/adaptor/alibailian"
-	"github.com/songquanpeng/one-api/relay/adaptor/baichuan"
-	"github.com/songquanpeng/one-api/relay/adaptor/baiduv2"
-	"github.com/songquanpeng/one-api/relay/adaptor/deepseek"
-	"github.com/songquanpeng/one-api/relay/adaptor/doubao"
-	"github.com/songquanpeng/one-api/relay/adaptor/geminiv2"
-	"github.com/songquanpeng/one-api/relay/adaptor/groq"
-	"github.com/songquanpeng/one-api/relay/adaptor/lingyiwanwu"
-	"github.com/songquanpeng/one-api/relay/adaptor/minimax"
-	"github.com/songquanpeng/one-api/relay/adaptor/mistral"
-	"github.com/songquanpeng/one-api/relay/adaptor/moonshot"
-	"github.com/songquanpeng/one-api/relay/adaptor/novita"
-	"github.com/songquanpeng/one-api/relay/adaptor/openrouter"
-	"github.com/songquanpeng/one-api/relay/adaptor/siliconflow"
-	"github.com/songquanpeng/one-api/relay/adaptor/stepfun"
-	"github.com/songquanpeng/one-api/relay/adaptor/togetherai"
-	"github.com/songquanpeng/one-api/relay/adaptor/xai"
-	"github.com/songquanpeng/one-api/relay/adaptor/xunfeiv2"
-	"github.com/songquanpeng/one-api/relay/channeltype"
+	"github.com/w-run/one-api/relay/adaptor/ai360"
+	"github.com/w-run/one-api/relay/adaptor/alibailian"
+	"github.com/w-run/one-api/relay/adaptor/baichuan"
+	"github.com/w-run/one-api/relay/adaptor/baiduv2"
+	"github.com/w-run/one-api/relay/adaptor/cerebras"
+	"github.com/w-run/one-api/relay/adaptor/deepseek"
+	"github.com/w-run/one-api/relay/adaptor/doubao"
+	"github.com/w-run/one-api/relay/adaptor/geminiv2"
+	"github.com/w-run/one-api/relay/adaptor/githubmodels"
+	"github.com/w-run/one-api/relay/adaptor/groq"
+	"github.com/w-run/one-api/relay/adaptor/lingyiwanwu"
+	"github.com/w-run/one-api/relay/adaptor/minimax"
+	"github.com/w-run/one-api/relay/adaptor/mistral"
+	"github.com/w-run/one-api/relay/adaptor/moonshot"
+	"github.com/w-run/one-api/relay/adaptor/novita"
+	"github.com/w-run/one-api/relay/adaptor/nvidia"
+	"github.com/w-run/one-api/relay/adaptor/openrouter"
+	"github.com/w-run/one-api/relay/adaptor/perplexity"
+	"github.com/w-run/one-api/relay/adaptor/siliconflow"
+	"github.com/w-run/one-api/relay/adaptor/stepfun"
+	"github.com/w-run/one-api/relay/adaptor/togetherai"
+	"github.com/w-run/one-api/relay/adaptor/xai"
+	"github.com/w-run/one-api/relay/adaptor/xunfeiv2"
+	"github.com/w-run/one-api/relay/channeltype"
 )
 
 var CompatibleChannels = []int{
@@ -41,6 +45,10 @@ var CompatibleChannels = []int{
 	channeltype.XAI,
 	channeltype.BaiduV2,
 	channeltype.XunfeiV2,
+	channeltype.NVIDIA,
+	channeltype.Perplexity,
+	channeltype.Cerebras,
+	channeltype.GitHubModels,
 }
 
 func GetCompatibleChannelMeta(channelType int) (string, []string) {
@@ -85,6 +93,14 @@ func GetCompatibleChannelMeta(channelType int) (string, []string) {
 		return "alibailian", alibailian.ModelList
 	case channeltype.GeminiOpenAICompatible:
 		return "geminiv2", geminiv2.ModelList
+	case channeltype.NVIDIA:
+		return "nvidia", nvidia.ModelList
+	case channeltype.Perplexity:
+		return "perplexity", perplexity.ModelList
+	case channeltype.Cerebras:
+		return "cerebras", cerebras.ModelList
+	case channeltype.GitHubModels:
+		return "githubmodels", githubmodels.ModelList
 	default:
 		return "openai", ModelList
 	}

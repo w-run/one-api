@@ -54,6 +54,11 @@ var ChannelBaseURLs = []string{
 	"",                                          // 50
 
 	"https://generativelanguage.googleapis.com/v1beta/openai/", // 51
+
+	"https://integrate.api.nvidia.com/v1",    // 52 NVIDIA
+	"https://api.perplexity.ai",              // 53 Perplexity
+	"https://api.cerebras.ai/v1",             // 54 Cerebras
+	"https://models.inference.ai.azure.com",  // 55 GitHubModels
 }
 
 func init() {

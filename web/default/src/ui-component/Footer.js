@@ -1,0 +1,39 @@
+// material-ui
+import { Link, Container, Box } from '@mui/material';
+import React from 'react';
+import { useSelector } from 'react-redux';
+
+// ==============================|| FOOTER - AUTHENTICATION 2 & 3 ||============================== //
+
+const Footer = () => {
+  const siteInfo = useSelector((state) => state.siteInfo);
+
+  return (
+    <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '64px' }}>
+      <Box sx={{ textAlign: 'center' }}>
+        {siteInfo.footer_html ? (
+          <div className="custom-footer" dangerouslySetInnerHTML={{ __html: siteInfo.footer_html }}></div>
+        ) : (
+          <>            <Link href="https://github.com/w-run/one-api" target="_blank">
+              {siteInfo.system_name} v1.0.0{' '}
+            </Link>
+            由{' '}
+            <Link href="https://github.com/w-run" target="_blank">
+              W/Run
+            </Link>{' '}
+            二次开发 · 原版{' '}
+            <Link href="https://github.com/songquanpeng" target="_blank">
+              JustSong
+            </Link>{' '}
+            · 主题 berry 来自{' '}
+            <Link href="https://github.com/MartialBE" target="_blank">
+              MartialBE
+            </Link>{' '}，源代码遵循
+            <Link href="https://opensource.org/licenses/mit-license.php"> MIT 协议</Link></>
+        )}
+      </Box>
+    </Container>
+  );
+};
+
+export default Footer;

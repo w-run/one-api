@@ -3,9 +3,9 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/songquanpeng/one-api/common"
-	"github.com/songquanpeng/one-api/common/helper"
-	"github.com/songquanpeng/one-api/common/logger"
+	"github.com/w-run/one-api/common"
+	"github.com/w-run/one-api/common/helper"
+	"github.com/w-run/one-api/common/logger"
 	"strings"
 )
 

@@ -6,10 +6,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/songquanpeng/one-api/common/ctxkey"
-	"github.com/songquanpeng/one-api/model"
-	"github.com/songquanpeng/one-api/relay/channeltype"
-	"github.com/songquanpeng/one-api/relay/relaymode"
+	"github.com/w-run/one-api/common/ctxkey"
+	"github.com/w-run/one-api/model"
+	"github.com/w-run/one-api/relay/channeltype"
+	"github.com/w-run/one-api/relay/relaymode"
 )
 
 type Meta struct {

@@ -1,6 +1,6 @@
 package aws
 
-import "github.com/songquanpeng/one-api/relay/adaptor/anthropic"
+import "github.com/w-run/one-api/relay/adaptor/anthropic"
 
 // Request is the request to AWS Claude
 //

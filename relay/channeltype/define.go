@@ -53,5 +53,9 @@ const (
 	AliBailian
 	OpenAICompatible
 	GeminiOpenAICompatible
+	NVIDIA
+	Perplexity
+	Cerebras
+	GitHubModels
 	Dummy
 )

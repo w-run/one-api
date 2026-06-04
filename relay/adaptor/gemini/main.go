@@ -8,17 +8,17 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/songquanpeng/one-api/common/render"
+	"github.com/w-run/one-api/common/render"
 
-	"github.com/songquanpeng/one-api/common"
-	"github.com/songquanpeng/one-api/common/config"
-	"github.com/songquanpeng/one-api/common/helper"
-	"github.com/songquanpeng/one-api/common/image"
-	"github.com/songquanpeng/one-api/common/logger"
-	"github.com/songquanpeng/one-api/common/random"
-	"github.com/songquanpeng/one-api/relay/adaptor/openai"
-	"github.com/songquanpeng/one-api/relay/constant"
-	"github.com/songquanpeng/one-api/relay/model"
+	"github.com/w-run/one-api/common"
+	"github.com/w-run/one-api/common/config"
+	"github.com/w-run/one-api/common/helper"
+	"github.com/w-run/one-api/common/image"
+	"github.com/w-run/one-api/common/logger"
+	"github.com/w-run/one-api/common/random"
+	"github.com/w-run/one-api/relay/adaptor/openai"
+	"github.com/w-run/one-api/relay/constant"
+	"github.com/w-run/one-api/relay/model"
 
 	"github.com/gin-gonic/gin"
 )
