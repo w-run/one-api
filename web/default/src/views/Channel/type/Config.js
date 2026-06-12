@@ -8,7 +8,9 @@ const defaultConfig = {
     model_mapping: '',
     models: [],
     groups: ['default'],
-    config: {}
+    config: {},
+    fallback_enabled: true,
+    fallback_triggers: ''
   },
   inputLabel: {
     name: '渠道名称',

@@ -194,6 +194,30 @@ export default function ChannelTableRow({
         </TableCell>
 
         <TableCell>
+          <Tooltip
+            title={
+              item.fallback_enabled === false
+                ? "该渠道不参与回退队列（仅作主选）"
+                : "该渠道会作为其他渠道的兜底"
+            }
+            placement="top"
+          >
+            <span>
+              <Label
+                color={item.fallback_enabled === false ? "default" : "success"}
+                variant="outlined"
+              >
+                {item.fallback_enabled === false ? "关闭" : "开启"}
+              </Label>
+            </span>
+          </Tooltip>
+        </TableCell>
+
+        <TableCell>
+          {renderTriggers(item.fallback_triggers)}
+        </TableCell>
+
+        <TableCell>
           <IconButton
             onClick={handleOpenMenu}
             sx={{ color: "rgb(99, 115, 129)" }}
@@ -275,4 +299,39 @@ function renderBalance(type, balance) {
     default:
       return <span>不支持</span>;
   }
+}
+
+const TRIGGER_LABELS = {
+  "429": { text: "429", color: "warning" },
+  "5xx": { text: "5xx", color: "error" },
+  timeout: { text: "超时", color: "info" },
+};
+
+function renderTriggers(raw) {
+  if (!raw || raw === "" || raw === null || raw === undefined) {
+    return (
+      <Tooltip title="匹配所有错误类型（429 / 5xx / 超时）" placement="top">
+        <Label color="primary" variant="outlined">
+          全部
+        </Label>
+      </Tooltip>
+    );
+  }
+  const list = String(raw)
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s);
+  return (
+    <span style={{ display: "inline-flex", gap: 4, flexWrap: "wrap" }}>
+      {list.map((t) => (
+        <Label
+          key={t}
+          color={TRIGGER_LABELS[t]?.color || "default"}
+          variant="outlined"
+        >
+          {TRIGGER_LABELS[t]?.text || t}
+        </Label>
+      ))}
+    </span>
+  );
 }

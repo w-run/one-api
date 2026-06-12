@@ -11,6 +11,8 @@ const headCells = [
   { id: 'used_quota', label: '已消耗', numeric: true },
   { id: 'balance', label: '余额', numeric: true },
   { id: 'priority', label: '优先级', numeric: true },
+  { id: 'fallback_enabled', label: '回退', numeric: true },
+  { id: 'fallback_triggers', label: '触发器', numeric: true },
   { id: 'actions', label: '操作', sortable: false }
 ];
 
