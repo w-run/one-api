@@ -17,6 +17,7 @@ import (
 	dbmodel "github.com/w-run/mimi-router/model"
 	"github.com/w-run/mimi-router/monitor"
 	"github.com/w-run/mimi-router/relay/controller"
+	"github.com/w-run/mimi-router/relay/fallback"
 	"github.com/w-run/mimi-router/relay/model"
 	"github.com/w-run/mimi-router/relay/relaymode"
 )
@@ -56,50 +57,84 @@ func Relay(c *gin.Context) {
 		monitor.Emit(channelId, true)
 		return
 	}
-	lastFailedChannelId := channelId
 	channelName := c.GetString(ctxkey.ChannelName)
 	group := c.GetString(ctxkey.Group)
 	originalModel := c.GetString(ctxkey.OriginalModel)
-	go processChannelRelayError(ctx, userId, channelId, channelName, *bizErr)
+	go processChannelRelayError(ctx, userId, channelId, channelName, bizErr)
 	requestId := c.GetString(helper.RequestIdKey)
-	retryTimes := config.RetryTimes
-	if !shouldRetry(c, bizErr.StatusCode) {
-		logger.Errorf(ctx, "relay error happen, status code is %d, won't retry in this case", bizErr.StatusCode)
-		retryTimes = 0
+
+	// 分类错误：429 / 5xx / 网络层错误
+	trigger := fallback.ClassifyError(bizErr.StatusCode, nil)
+	// 收到 429 且上游给出 Retry-After 时，软禁用该渠道
+	fallback.SoftBanFromError(ctx, channelId, bizErr)
+
+	if trigger == "" {
+		logger.Errorf(ctx, "non-retryable error (status %d): %s", bizErr.StatusCode, bizErr.Error.Message)
+		writeRelayError(c, bizErr, requestId)
+		return
 	}
+
+	// 询问当前渠道：是否允许回退
+	currentChannel, _ := dbmodel.GetChannelById(channelId, false)
+	if !fallback.ShouldFallback(currentChannel, trigger) {
+		logger.Errorf(ctx, "channel #%d not configured to fallback on %s", channelId, trigger)
+		writeRelayError(c, bizErr, requestId)
+		return
+	}
+
+	retryTimes := config.RetryTimes
+	if retryTimes <= 0 {
+		writeRelayError(c, bizErr, requestId)
+		return
+	}
+
+	usedIDs := []int{channelId}
 	for i := retryTimes; i > 0; i-- {
-		channel, err := dbmodel.CacheGetRandomSatisfiedChannel(group, originalModel, i != retryTimes)
+		channel, err := dbmodel.CachePickFallbackChannel(group, originalModel, usedIDs)
 		if err != nil {
-			logger.Errorf(ctx, "CacheGetRandomSatisfiedChannel failed: %+v", err)
+			logger.Errorf(ctx, "CachePickFallbackChannel failed: %+v", err)
 			break
 		}
-		logger.Infof(ctx, "using channel #%d to retry (remain times %d)", channel.Id, i)
-		if channel.Id == lastFailedChannelId {
-			continue
-		}
+		logger.Infof(ctx, "fallback to channel #%d (remain times %d, trigger %s)", channel.Id, i, trigger)
 		middleware.SetupContextForSelectedChannel(c, channel, originalModel)
 		requestBody, err := common.GetRequestBody(c)
+		if err != nil {
+			logger.Errorf(ctx, "GetRequestBody failed: %+v", err)
+			break
+		}
 		c.Request.Body = io.NopCloser(bytes.NewBuffer(requestBody))
 		bizErr = relayHelper(c, relayMode)
 		if bizErr == nil {
 			return
 		}
-		channelId := c.GetInt(ctxkey.ChannelId)
-		lastFailedChannelId = channelId
-		channelName := c.GetString(ctxkey.ChannelName)
-		go processChannelRelayError(ctx, userId, channelId, channelName, *bizErr)
-	}
-	if bizErr != nil {
-		if bizErr.StatusCode == http.StatusTooManyRequests {
-			bizErr.Error.Message = "当前分组上游负载已饱和，请稍后再试"
-		}
+		channelId = c.GetInt(ctxkey.ChannelId)
+		channelName = c.GetString(ctxkey.ChannelName)
+		usedIDs = append(usedIDs, channelId)
+		go processChannelRelayError(ctx, userId, channelId, channelName, bizErr)
 
-		// BUG: bizErr is in race condition
-		bizErr.Error.Message = helper.MessageWithRequestId(bizErr.Error.Message, requestId)
-		c.JSON(bizErr.StatusCode, gin.H{
-			"error": bizErr.Error,
-		})
+		// 处理新一轮失败的软禁用；遇到不可重试错误立即终止
+		newTrigger := fallback.ClassifyError(bizErr.StatusCode, nil)
+		fallback.SoftBanFromError(ctx, channelId, bizErr)
+		if newTrigger == "" {
+			logger.Errorf(ctx, "non-retryable error in fallback (status %d)", bizErr.StatusCode)
+			break
+		}
 	}
+
+	if bizErr != nil {
+		writeRelayError(c, bizErr, requestId)
+	}
+}
+
+func writeRelayError(c *gin.Context, bizErr *model.ErrorWithStatusCode, requestId string) {
+	if bizErr.StatusCode == http.StatusTooManyRequests {
+		bizErr.Error.Message = "当前分组上游负载已饱和，请稍后再试"
+	}
+	// BUG: bizErr is in race condition
+	bizErr.Error.Message = helper.MessageWithRequestId(bizErr.Error.Message, requestId)
+	c.JSON(bizErr.StatusCode, gin.H{
+		"error": bizErr.Error,
+	})
 }
 
 func shouldRetry(c *gin.Context, statusCode int) bool {
@@ -121,7 +156,7 @@ func shouldRetry(c *gin.Context, statusCode int) bool {
 	return true
 }
 
-func processChannelRelayError(ctx context.Context, userId int, channelId int, channelName string, err model.ErrorWithStatusCode) {
+func processChannelRelayError(ctx context.Context, userId int, channelId int, channelName string, err *model.ErrorWithStatusCode) {
 	logger.Errorf(ctx, "relay error (channel id %d, user id: %d): %s", channelId, userId, err.Message)
 	// https://platform.openai.com/docs/guides/error-codes/api-errors
 	if monitor.ShouldDisableChannel(&err.Error, err.StatusCode) {
