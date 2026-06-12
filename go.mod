@@ -1,4 +1,4 @@
-module github.com/w-run/one-api
+module github.com/w-run/mimi-router
 
 go 1.20
 

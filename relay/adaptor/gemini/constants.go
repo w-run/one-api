@@ -1,7 +1,7 @@
 package gemini
 
 import (
-	"github.com/w-run/one-api/relay/adaptor/geminiv2"
+	"github.com/w-run/mimi-router/relay/adaptor/geminiv2"
 )
 
 // https://ai.google.dev/models/gemini

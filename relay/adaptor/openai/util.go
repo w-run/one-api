@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 func ErrorWrapper(err error, code string, statusCode int) *model.ErrorWithStatusCode {

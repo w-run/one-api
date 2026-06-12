@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/w-run/one-api/common/i18n"
+	"github.com/w-run/mimi-router/common/i18n"
 )
 
 func Language() gin.HandlerFunc {

@@ -3,8 +3,8 @@ package router
 import (
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/controller"
-	"github.com/w-run/one-api/middleware"
+	"github.com/w-run/mimi-router/controller"
+	"github.com/w-run/mimi-router/middleware"
 )
 
 func SetDashboardRouter(router *gin.Engine) {

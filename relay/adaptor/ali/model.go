@@ -1,8 +1,8 @@
 package ali
 
 import (
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 type Message struct {

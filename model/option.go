@@ -1,9 +1,9 @@
 package model
 
 import (
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/common/logger"
-	billingratio "github.com/w-run/one-api/relay/billing/ratio"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/logger"
+	billingratio "github.com/w-run/mimi-router/relay/billing/ratio"
 	"strconv"
 	"strings"
 	"time"

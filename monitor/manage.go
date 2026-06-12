@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 func ShouldDisableChannel(err *model.Error, statusCode int) bool {

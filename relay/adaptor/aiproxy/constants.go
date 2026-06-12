@@ -1,6 +1,6 @@
 package aiproxy
 
-import "github.com/w-run/one-api/relay/adaptor/openai"
+import "github.com/w-run/mimi-router/relay/adaptor/openai"
 
 var ModelList = []string{""}
 

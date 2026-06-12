@@ -16,14 +16,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/helper"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/common/random"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/constant"
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/helper"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/common/random"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/constant"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 // https://console.xfyun.cn/services/cbm

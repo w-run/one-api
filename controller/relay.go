@@ -8,17 +8,17 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/common/ctxkey"
-	"github.com/w-run/one-api/common/helper"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/middleware"
-	dbmodel "github.com/w-run/one-api/model"
-	"github.com/w-run/one-api/monitor"
-	"github.com/w-run/one-api/relay/controller"
-	"github.com/w-run/one-api/relay/model"
-	"github.com/w-run/one-api/relay/relaymode"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/ctxkey"
+	"github.com/w-run/mimi-router/common/helper"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/middleware"
+	dbmodel "github.com/w-run/mimi-router/model"
+	"github.com/w-run/mimi-router/monitor"
+	"github.com/w-run/mimi-router/relay/controller"
+	"github.com/w-run/mimi-router/relay/model"
+	"github.com/w-run/mimi-router/relay/relaymode"
 )
 
 // https://platform.openai.com/docs/api-reference/chat

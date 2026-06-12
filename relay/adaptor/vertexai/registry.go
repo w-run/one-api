@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	claude "github.com/w-run/one-api/relay/adaptor/vertexai/claude"
-	gemini "github.com/w-run/one-api/relay/adaptor/vertexai/gemini"
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/model"
+	claude "github.com/w-run/mimi-router/relay/adaptor/vertexai/claude"
+	gemini "github.com/w-run/mimi-router/relay/adaptor/vertexai/gemini"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 type VertexAIModelType int

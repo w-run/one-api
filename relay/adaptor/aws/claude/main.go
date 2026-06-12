@@ -14,14 +14,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/ctxkey"
-	"github.com/w-run/one-api/common/helper"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/relay/adaptor/anthropic"
-	"github.com/w-run/one-api/relay/adaptor/aws/utils"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	relaymodel "github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/ctxkey"
+	"github.com/w-run/mimi-router/common/helper"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/relay/adaptor/anthropic"
+	"github.com/w-run/mimi-router/relay/adaptor/aws/utils"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	relaymodel "github.com/w-run/mimi-router/relay/model"
 )
 
 // https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html

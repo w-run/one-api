@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/w-run/one-api/common/helper"
+	"github.com/w-run/mimi-router/common/helper"
 )
 
 func RequestId() func(c *gin.Context) {

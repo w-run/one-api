@@ -5,11 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"github.com/w-run/one-api/common/ctxkey"
-	"github.com/w-run/one-api/relay/adaptor/anthropic"
+	"github.com/w-run/mimi-router/common/ctxkey"
+	"github.com/w-run/mimi-router/relay/adaptor/anthropic"
 
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 var ModelList = []string{

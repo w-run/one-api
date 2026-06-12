@@ -2,10 +2,10 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/common/ctxkey"
-	"github.com/w-run/one-api/model"
-	relaymodel "github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/ctxkey"
+	"github.com/w-run/mimi-router/model"
+	relaymodel "github.com/w-run/mimi-router/relay/model"
 )
 
 func GetSubscription(c *gin.Context) {

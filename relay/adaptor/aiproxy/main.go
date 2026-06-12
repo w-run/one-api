@@ -4,20 +4,20 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/w-run/one-api/common/render"
+	"github.com/w-run/mimi-router/common/render"
 	"io"
 	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/helper"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/common/random"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/constant"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/helper"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/common/random"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/constant"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 // https://docs.aiproxy.io/dev/library#使用已经定制好的知识库进行对话问答

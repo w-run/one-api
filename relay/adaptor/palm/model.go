@@ -1,7 +1,7 @@
 package palm
 
 import (
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 type ChatMessage struct {

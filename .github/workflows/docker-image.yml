@@ -55,7 +55,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            wrundev/one-api
+            wrundev/mimi-router
             ghcr.io/${{ github.repository }}
 
       - name: Build and push Docker images

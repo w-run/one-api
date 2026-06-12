@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"github.com/w-run/one-api/common/config"
+	"github.com/w-run/mimi-router/common/config"
 	"net/http"
 )
 

@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	billingratio "github.com/w-run/one-api/relay/billing/ratio"
+	billingratio "github.com/w-run/mimi-router/relay/billing/ratio"
 	"net/http"
 )
 

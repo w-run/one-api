@@ -10,11 +10,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/render"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/render"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 func ChatHandler(c *gin.Context, resp *http.Response) (

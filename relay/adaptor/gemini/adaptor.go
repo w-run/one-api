@@ -8,13 +8,13 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/common/helper"
-	channelhelper "github.com/w-run/one-api/relay/adaptor"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/model"
-	"github.com/w-run/one-api/relay/relaymode"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/helper"
+	channelhelper "github.com/w-run/mimi-router/relay/adaptor"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/model"
+	"github.com/w-run/mimi-router/relay/relaymode"
 )
 
 type Adaptor struct {

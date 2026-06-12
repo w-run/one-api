@@ -8,11 +8,11 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/relay/adaptor"
-	channelhelper "github.com/w-run/one-api/relay/adaptor"
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/model"
-	relaymodel "github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/relay/adaptor"
+	channelhelper "github.com/w-run/mimi-router/relay/adaptor"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/model"
+	relaymodel "github.com/w-run/mimi-router/relay/model"
 )
 
 var _ adaptor.Adaptor = new(Adaptor)

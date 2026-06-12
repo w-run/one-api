@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/model"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/model"
 )
 
 func ReturnPreConsumedQuota(ctx context.Context, preConsumedQuota int64, tokenId int) {

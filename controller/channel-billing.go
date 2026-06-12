@@ -9,17 +9,17 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/w-run/one-api/common/client"
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/model"
-	"github.com/w-run/one-api/monitor"
-	"github.com/w-run/one-api/relay/channeltype"
+	"github.com/w-run/mimi-router/common/client"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/model"
+	"github.com/w-run/mimi-router/monitor"
+	"github.com/w-run/mimi-router/relay/channeltype"
 
 	"github.com/gin-gonic/gin"
 )
 
-// https://github.com/w-run/one-api/issues/79
+// https://github.com/w-run/mimi-router/issues/79
 
 type OpenAISubscriptionResponse struct {
 	Object             string  `json:"object"`

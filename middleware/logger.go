@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common/helper"
+	"github.com/w-run/mimi-router/common/helper"
 )
 
 func SetUpLogger(server *gin.Engine) {

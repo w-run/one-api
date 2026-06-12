@@ -1,7 +1,7 @@
 package common
 
 import (
-	"github.com/w-run/one-api/common/env"
+	"github.com/w-run/mimi-router/common/env"
 )
 
 var UsingSQLite = false

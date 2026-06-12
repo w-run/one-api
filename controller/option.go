@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/common/helper"
-	"github.com/w-run/one-api/common/i18n"
-	"github.com/w-run/one-api/model"
-	billingratio "github.com/w-run/one-api/relay/billing/ratio"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/helper"
+	"github.com/w-run/mimi-router/common/i18n"
+	"github.com/w-run/mimi-router/model"
+	billingratio "github.com/w-run/mimi-router/relay/billing/ratio"
 
 	"github.com/gin-gonic/gin"
 )

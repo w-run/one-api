@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/w-run/one-api/common/logger"
+	"github.com/w-run/mimi-router/common/logger"
 )
 
 const (

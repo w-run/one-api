@@ -3,7 +3,7 @@ package image
 import (
 	"bytes"
 	"encoding/base64"
-	"github.com/w-run/one-api/common/client"
+	"github.com/w-run/mimi-router/common/client"
 	"image"
 	_ "image/gif"
 	_ "image/jpeg"

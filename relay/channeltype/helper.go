@@ -1,6 +1,6 @@
 package channeltype
 
-import "github.com/w-run/one-api/relay/apitype"
+import "github.com/w-run/mimi-router/relay/apitype"
 
 func ToAPIType(channelType int) int {
 	apiType := apitype.OpenAI

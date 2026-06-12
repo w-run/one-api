@@ -1,7 +1,7 @@
 package monitor
 
 import (
-	"github.com/w-run/one-api/common/config"
+	"github.com/w-run/mimi-router/common/config"
 )
 
 var store = make(map[int][]bool)

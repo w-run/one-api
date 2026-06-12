@@ -4,11 +4,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/bedrockruntime"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"github.com/w-run/one-api/common/ctxkey"
-	"github.com/w-run/one-api/relay/adaptor/anthropic"
-	"github.com/w-run/one-api/relay/adaptor/aws/utils"
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common/ctxkey"
+	"github.com/w-run/mimi-router/relay/adaptor/anthropic"
+	"github.com/w-run/mimi-router/relay/adaptor/aws/utils"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 var _ utils.AwsAdapter = new(Adaptor)

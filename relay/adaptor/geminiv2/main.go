@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/w-run/one-api/relay/meta"
+	"github.com/w-run/mimi-router/relay/meta"
 )
 
 func GetRequestURL(meta *meta.Meta) (string, error) {

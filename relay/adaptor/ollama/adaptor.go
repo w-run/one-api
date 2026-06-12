@@ -3,14 +3,14 @@ package ollama
 import (
 	"errors"
 	"fmt"
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/relaymode"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/relaymode"
 	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/relay/adaptor"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/relay/adaptor"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 type Adaptor struct {

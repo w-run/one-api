@@ -14,7 +14,7 @@ const Footer = () => {
         {siteInfo.footer_html ? (
           <div className="custom-footer" dangerouslySetInnerHTML={{ __html: siteInfo.footer_html }}></div>
         ) : (
-          <>            <Link href="https://github.com/w-run/one-api" target="_blank">
+          <>            <Link href="https://github.com/w-run/mimi-router" target="_blank">
               {siteInfo.system_name} v1.0.0{' '}
             </Link>
             由{' '}

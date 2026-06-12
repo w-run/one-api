@@ -13,7 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/w-run/one-api/common/random"
+	"github.com/w-run/mimi-router/common/random"
 )
 
 func OpenBrowser(url string) {

@@ -9,17 +9,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/relay"
-	"github.com/w-run/one-api/relay/adaptor"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/apitype"
-	"github.com/w-run/one-api/relay/billing"
-	billingratio "github.com/w-run/one-api/relay/billing/ratio"
-	"github.com/w-run/one-api/relay/channeltype"
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/relay"
+	"github.com/w-run/mimi-router/relay/adaptor"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/apitype"
+	"github.com/w-run/mimi-router/relay/billing"
+	billingratio "github.com/w-run/mimi-router/relay/billing/ratio"
+	"github.com/w-run/mimi-router/relay/channeltype"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 func RelayTextHelper(c *gin.Context) *model.ErrorWithStatusCode {

@@ -3,8 +3,8 @@ package aws_test
 import (
 	"testing"
 
-	aws "github.com/w-run/one-api/relay/adaptor/aws/llama3"
-	relaymodel "github.com/w-run/one-api/relay/model"
+	aws "github.com/w-run/mimi-router/relay/adaptor/aws/llama3"
+	relaymodel "github.com/w-run/mimi-router/relay/model"
 	"github.com/stretchr/testify/assert"
 )
 

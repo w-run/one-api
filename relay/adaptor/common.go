@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common/client"
-	"github.com/w-run/one-api/relay/meta"
+	"github.com/w-run/mimi-router/common/client"
+	"github.com/w-run/mimi-router/relay/meta"
 	"io"
 	"net/http"
 )

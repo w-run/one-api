@@ -8,8 +8,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/config"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/config"
 )
 
 var timeFormat = "2006-01-02T15:04:05.000Z"

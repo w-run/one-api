@@ -6,10 +6,10 @@ import (
 
 	"gorm.io/gorm"
 
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/common/helper"
-	"github.com/w-run/one-api/common/logger"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/helper"
+	"github.com/w-run/mimi-router/common/logger"
 )
 
 type Log struct {

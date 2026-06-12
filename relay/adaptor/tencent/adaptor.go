@@ -9,12 +9,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/w-run/one-api/common/helper"
-	"github.com/w-run/one-api/relay/adaptor"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/meta"
-	"github.com/w-run/one-api/relay/model"
-	"github.com/w-run/one-api/relay/relaymode"
+	"github.com/w-run/mimi-router/common/helper"
+	"github.com/w-run/mimi-router/relay/adaptor"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/meta"
+	"github.com/w-run/mimi-router/relay/model"
+	"github.com/w-run/mimi-router/relay/relaymode"
 )
 
 // https://cloud.tencent.com/document/api/1729/101837

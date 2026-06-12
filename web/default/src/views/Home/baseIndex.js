@@ -47,7 +47,7 @@ const BaseIndex = () => (
           variant="contained"
           size="large"
           startIcon={<GitHub />}
-          href="https://github.com/w-run/one-api"
+          href="https://github.com/w-run/mimi-router"
           target="_blank"
           sx={{
             borderRadius: 999,

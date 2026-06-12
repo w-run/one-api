@@ -1,9 +1,9 @@
 package aws
 
 import (
-	claude "github.com/w-run/one-api/relay/adaptor/aws/claude"
-	llama3 "github.com/w-run/one-api/relay/adaptor/aws/llama3"
-	"github.com/w-run/one-api/relay/adaptor/aws/utils"
+	claude "github.com/w-run/mimi-router/relay/adaptor/aws/claude"
+	llama3 "github.com/w-run/mimi-router/relay/adaptor/aws/llama3"
+	"github.com/w-run/mimi-router/relay/adaptor/aws/utils"
 )
 
 type AwsModelType int

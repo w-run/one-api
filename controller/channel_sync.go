@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/model"
-	"github.com/w-run/one-api/relay/channeltype"
+	"github.com/w-run/mimi-router/model"
+	"github.com/w-run/mimi-router/relay/channeltype"
 )
 
 // openRouterModelResponse matches OpenRouter /api/v1/models response

@@ -28,7 +28,7 @@ RUN go mod download
 COPY . .
 COPY --from=builder /web/build ./web/build
 
-RUN go build -trimpath -ldflags "-s -w -X 'github.com/w-run/one-api/common.Version=$(cat VERSION)' -linkmode external -extldflags '-static'" -o one-api
+RUN go build -trimpath -ldflags "-s -w -X 'github.com/w-run/mimi-router/common.Version=$(cat VERSION)' -linkmode external -extldflags '-static'" -o one-api
 
 FROM alpine:latest
 

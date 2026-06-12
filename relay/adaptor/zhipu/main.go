@@ -3,7 +3,7 @@ package zhipu
 import (
 	"bufio"
 	"encoding/json"
-	"github.com/w-run/one-api/common/render"
+	"github.com/w-run/mimi-router/common/render"
 	"io"
 	"net/http"
 	"strings"
@@ -12,12 +12,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/helper"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/constant"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/helper"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/constant"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 // https://open.bigmodel.cn/doc/api#chatglm_std

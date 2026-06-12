@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common"
+	"github.com/w-run/mimi-router/common"
 )
 
 func StringData(c *gin.Context, str string) {

@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common/ctxkey"
+	"github.com/w-run/mimi-router/common/ctxkey"
 )
 
 func GetRequestBody(c *gin.Context) ([]byte, error) {

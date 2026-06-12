@@ -6,11 +6,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/relay"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/meta"
-	relaymodel "github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/relay"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/meta"
+	relaymodel "github.com/w-run/mimi-router/relay/model"
 )
 
 // RelayProxyHelper is a helper function to proxy the request to the upstream service

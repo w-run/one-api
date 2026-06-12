@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/w-run/one-api/relay/channeltype"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/relay/channeltype"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 func ResponseText2Usage(responseText string, modelName string, promptTokens int) *model.Usage {

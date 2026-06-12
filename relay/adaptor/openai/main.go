@@ -8,14 +8,14 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/w-run/one-api/common/render"
+	"github.com/w-run/mimi-router/common/render"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/conv"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/relay/model"
-	"github.com/w-run/one-api/relay/relaymode"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/conv"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/relay/model"
+	"github.com/w-run/mimi-router/relay/relaymode"
 )
 
 const (

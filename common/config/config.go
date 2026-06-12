@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/w-run/one-api/common/env"
+	"github.com/w-run/mimi-router/common/env"
 
 	"github.com/google/uuid"
 )

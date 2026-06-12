@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/w-run/one-api"><img src="https://raw.githubusercontent.com/w-run/one-api/main/web/default/public/logo.png" width="150" height="150" alt="one-api logo"></a>
+  <a href="https://github.com/w-run/mimi-router"><img src="https://raw.githubusercontent.com/w-run/mimi-router/main/web/default/public/logo.png" width="150" height="150" alt="one-api logo"></a>
 </p>
 
 <div align="center">
@@ -11,14 +11,14 @@ _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
 </div>
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/w-run/one-api/main/LICENSE">
-    <img src="https://img.shields.io/github/license/w-run/one-api?color=brightgreen" alt="license">
+  <a href="https://raw.githubusercontent.com/w-run/mimi-router/main/LICENSE">
+    <img src="https://img.shields.io/github/license/w-run/mimi-router?color=brightgreen" alt="license">
   </a>
-  <a href="https://github.com/w-run/one-api/releases/latest">
-    <img src="https://img.shields.io/github/v/release/w-run/one-api?color=brightgreen&include_prereleases" alt="release">
+  <a href="https://github.com/w-run/mimi-router/releases/latest">
+    <img src="https://img.shields.io/github/v/release/w-run/mimi-router?color=brightgreen&include_prereleases" alt="release">
   </a>
-  <a href="https://hub.docker.com/repository/docker/wrundev/one-api">
-    <img src="https://img.shields.io/docker/pulls/wrundev/one-api?color=brightgreen" alt="docker pull">
+  <a href="https://hub.docker.com/repository/docker/wrundev/mimi-router">
+    <img src="https://img.shields.io/docker/pulls/wrundev/mimi-router?color=brightgreen" alt="docker pull">
   </a>
 </p>
 
@@ -34,8 +34,8 @@ _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
 | 当前版本 | `1.1.0` |
 | 上游版本 | 基于 [songquanpeng/one-api](https://github.com/songquanpeng/one-api) |
 | 许可证 | MIT（保留原作者署名） |
-| 镜像仓库 | `wrundev/one-api`（Docker Hub）/ `ghcr.io/w-run/one-api`（GHCR） |
-| Go 模块 | `github.com/w-run/one-api` |
+| 镜像仓库 | `wrundev/mimi-router`（Docker Hub）/ `ghcr.io/w-run/mimi-router`（GHCR） |
+| Go 模块 | `github.com/w-run/mimi-router` |
 | 前端目录 | `web/default`（基于 [MartialBE/berry](https://github.com/MartialBE) 主题） |
 
 ---
@@ -65,8 +65,8 @@ _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
 ### 4. 基础设施
 - GitHub CI 配置 Docker Hub 自动构建
 - 仓库脱离 fork 状态
-- Go 模块路径迁移至 `github.com/w-run/one-api`
-- Docker 镜像仓库迁移至 `wrundev/one-api`
+- Go 模块路径迁移至 `github.com/w-run/mimi-router`
+- Docker 镜像仓库迁移至 `wrundev/mimi-router`
 
 ### 5. 模型名称格式化
 - 重构渠道编辑中的「自动生成模型映射」算法，支持：
@@ -94,8 +94,8 @@ _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
 ### 4. 基础设施
 - GitHub CI 配置 Docker Hub 自动构建
 - 仓库脱离 fork 状态
-- Go 模块路径迁移至 `github.com/w-run/one-api`
-- Docker 镜像仓库迁移至 `wrundev/one-api`
+- Go 模块路径迁移至 `github.com/w-run/mimi-router`
+- Docker 镜像仓库迁移至 `wrundev/mimi-router`
 
 ---
 
@@ -110,7 +110,7 @@ _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/w-run/one-api.git
+git clone https://github.com/w-run/mimi-router.git
 cd one-api
 
 # 2. 前端开发
@@ -135,7 +135,7 @@ sh build.sh
 # 2. 构建后端
 cd ..
 go build -trimpath \
-  -ldflags "-s -w -X 'github.com/w-run/one-api/common.Version=$(cat VERSION)' \
+  -ldflags "-s -w -X 'github.com/w-run/mimi-router/common.Version=$(cat VERSION)' \
            -linkmode external -extldflags '-static'" \
   -o one-api
 ```
@@ -144,14 +144,14 @@ go build -trimpath \
 
 ```bash
 # 拉取
-docker pull wrundev/one-api
+docker pull wrundev/mimi-router
 
 # 运行（SQLite）
 docker run --name one-api -d --restart always \
   -p 3000:3000 \
   -e TZ=Asia/Shanghai \
   -v /home/ubuntu/data/one-api:/data \
-  wrundev/one-api
+  wrundev/mimi-router
 
 # 运行（MySQL）
 docker run --name one-api -d --restart always \
@@ -159,7 +159,7 @@ docker run --name one-api -d --restart always \
   -e SQL_DSN="root:123456@tcp(localhost:3306)/oneapi" \
   -e TZ=Asia/Shanghai \
   -v /home/ubuntu/data/one-api:/data \
-  wrundev/one-api
+  wrundev/mimi-router
 ```
 
 初始账号：`root` / `123456`（登录后请立即修改）。
@@ -195,7 +195,7 @@ one-api/
 
 ### CI/CD
 - `.github/workflows/docker-image.yml`：tag 触发时自动构建并推送 Docker 镜像
-- 镜像地址：`wrundev/one-api` + `ghcr.io/w-run/one-api`
+- 镜像地址：`wrundev/mimi-router` + `ghcr.io/w-run/mimi-router`
 - 所需 Secrets：
   - `DOCKERHUB_USERNAME`：Docker Hub 用户名
   - `DOCKERHUB_TOKEN`：Docker Hub Access Token

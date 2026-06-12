@@ -2,7 +2,7 @@ package relay
 
 import (
 	. "github.com/smartystreets/goconvey/convey"
-	"github.com/w-run/one-api/relay/apitype"
+	"github.com/w-run/mimi-router/relay/apitype"
 	"testing"
 )
 

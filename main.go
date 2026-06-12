@@ -11,16 +11,16 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
 
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/client"
-	"github.com/w-run/one-api/common/config"
-	"github.com/w-run/one-api/common/i18n"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/controller"
-	"github.com/w-run/one-api/middleware"
-	"github.com/w-run/one-api/model"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/router"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/client"
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/i18n"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/controller"
+	"github.com/w-run/mimi-router/middleware"
+	"github.com/w-run/mimi-router/model"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/router"
 )
 
 //go:embed web/build/*

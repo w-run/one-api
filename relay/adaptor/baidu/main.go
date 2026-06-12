@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/w-run/one-api/common/render"
+	"github.com/w-run/mimi-router/common/render"
 	"io"
 	"net/http"
 	"strings"
@@ -13,12 +13,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/w-run/one-api/common"
-	"github.com/w-run/one-api/common/client"
-	"github.com/w-run/one-api/common/logger"
-	"github.com/w-run/one-api/relay/adaptor/openai"
-	"github.com/w-run/one-api/relay/constant"
-	"github.com/w-run/one-api/relay/model"
+	"github.com/w-run/mimi-router/common"
+	"github.com/w-run/mimi-router/common/client"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/relay/adaptor/openai"
+	"github.com/w-run/mimi-router/relay/constant"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 // https://cloud.baidu.com/doc/WENXINWORKSHOP/s/flfmc9do2
