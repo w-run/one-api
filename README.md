@@ -91,11 +91,44 @@ _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
   - Logo + 标题 + 文案 + GitHub 按钮垂直排列
   - GitHub 按钮采用胶囊形（`borderRadius: 999`）
 
-### 4. 基础设施
-- GitHub CI 配置 Docker Hub 自动构建
-- 仓库脱离 fork 状态
-- Go 模块路径迁移至 `github.com/w-run/mimi-router`
-- Docker 镜像仓库迁移至 `wrundev/mimi-router`
+### 9. 渠道回退（fallback）机制
+> v1.2.0 引入。解决「同模型多渠道」场景下，调用出错时直接重试同一渠道导致网络超时/重复扣费的问题。
+
+**核心能力**
+- **触发器驱动的渠道回退**：调用同名模型遇错时按渠道 `priority`（升序）回退，支持三种错误触发器：
+  - `429` — 上游 `429 Too Many Requests`
+  - `5xx` — 上游 500~599 服务端错误
+  - `timeout` — 网络超时 / 连接失败 / `context.DeadlineExceeded`
+- **管理员可控**：`fallback_enabled` 字段允许管理员把某渠道从回退队列移除，仅作主选；`fallback_triggers` 限定该渠道参与哪些类型的回退。
+- **429 软禁用（soft-ban）**：当上游返回 429 且带 `Retry-After` 头时，自动将该渠道在内存中临时屏蔽至 `Retry-After` 到期，期间不再被选入回退池，避免重复 429。
+- **防环回退**：维护 `usedIDs` 集合记录本次请求已尝试过的渠道 ID，防止 A→B→A 死循环；尝试满 `RelayTimes` 后退出。
+
+**使用方式（管理员）**
+1. 进入「渠道管理」页面，新增/编辑渠道时勾选「参与回退」并按需填入触发器集合（逗号分隔，留空表示全匹配）：
+   ```
+   fallback_enabled = true
+   fallback_triggers = "429,5xx"   # 仅对 429 和 5xx 触发回退
+   ```
+2. 多个渠道挂载同一 `models` 字段时，调用会按 `priority ASC, id ASC` 顺序挑选，失败时按触发器命中下一个可用渠道。
+3. 对**只愿意作主选**的渠道（如成本高、速度快的旗舰渠道），关闭「参与回退」开关即可。
+
+**注意事项**
+- 4xx（非 429）错误、余额不足、参数错误等不会被回退，避免在错误请求上浪费下游配额。
+- 软禁用基于进程内存（`sync.Map`），重启或主备切换会清空；上游 429 短期高峰可被自动恢复。
+- 回退链最多尝试 `RelayTimes` 次（默认 5，可在系统设置中调整）。
+- 渠道表新增了 `fallback_enabled`（TINYINT(1) / BOOLEAN）和 `fallback_triggers`（VARCHAR(64)）两列，启动时通过 GORM AutoMigrate 自动补齐，无需手动迁移。
+
+**API 变更**
+- `Channel` 模型新增两个 JSON 字段（`omitempty` 已开启，旧数据无影响）：
+  - `fallback_enabled` *bool — `true` 参与回退，`false` 仅作主选，缺省 `true`。
+  - `fallback_triggers` *string — 逗号分隔的触发器集合，缺省 `""` 视为全匹配。
+- `GET /api/channel/`、`GET /api/channel/:id`、`POST /api/channel/`、`PUT /api/channel/` 响应/请求体均包含上述字段；前端「渠道管理」表格已新增「回退」与「触发器」列。
+- 新增 Go 公共包 `relay/fallback`，关键函数：
+  - `fallback.ClassifyError(statusCode, err) string` — 错误归类
+  - `fallback.ShouldFallback(channel, trigger) bool` — 渠道是否参与此次回退
+  - `fallback.SoftBanFromError(ctx, channelId, bizErr)` — 收到 429 时软禁用
+  - `fallback.ParseRetryAfter(value) int` — 解析 HTTP `Retry-After` 头
+- 新增 `model.SoftBanChannel / UnsoftBanChannel / IsChannelSoftBanned / CleanupExpiredSoftBan` 软禁用工具函数。
 
 ---
 
