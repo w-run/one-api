@@ -522,7 +522,7 @@ const OperationSetting = () => {
               onChange={handleInputChange}
               aria-describedby="helper-text-channel-CompletionRatio-label"
               minRows={5}
-              placeholder="为一个 JSON 文本，键为模型名称，值为倍率，此处的倍率设置是模型补全倍率相较于提示倍率的比例，使用该设置可强制覆盖 One API 的内部比例"
+              placeholder="为一个 JSON 文本，键为模型名称，值为倍率，此处的倍率设置是模型补全倍率相较于提示倍率的比例，使用该设置可强制覆盖 mimi-router 的内部比例"
             />
           </FormControl>
           <FormControl fullWidth>

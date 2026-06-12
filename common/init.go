@@ -18,10 +18,10 @@ var (
 )
 
 func printHelp() {
-	fmt.Println("One API " + Version + " - All in one API service for OpenAI API.")
-	fmt.Println("Copyright (C) 2023 JustSong. All rights reserved.")
+	fmt.Println("mimi-router " + Version + " - All in one API service for OpenAI API.")
+	fmt.Println("Copyright (C) 2026 w-run. All rights reserved.")
 	fmt.Println("GitHub: https://github.com/w-run/mimi-router")
-	fmt.Println("Usage: one-api [--port <port>] [--log-dir <log directory>] [--version] [--help]")
+	fmt.Println("Usage: mimi-router [--port <port>] [--log-dir <log directory>] [--version] [--help]")
 }
 
 func Init() {

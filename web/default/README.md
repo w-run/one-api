@@ -1,6 +1,6 @@
-# One API 前端界面
+# mimi-router 前端界面
 
-本项目是 One API 的前端界面（w-run 二次开发版）。
+本项目是 mimi-router 的前端界面（w-run 二次开发版）。
 
 ## 使用的开源项目
 

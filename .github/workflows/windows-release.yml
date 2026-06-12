@@ -48,12 +48,12 @@ jobs:
       - name: Build Backend
         run: |
           go mod download
-          go build -ldflags "-s -w -X 'github.com/w-run/mimi-router/common.Version=$(git describe --tags)'" -o one-api.exe
+          go build -ldflags "-s -w -X 'github.com/w-run/mimi-router/common.Version=$(git describe --tags)'" -o mimi-router.exe
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: one-api.exe
+          files: mimi-router.exe
           draft: true
           generate_release_notes: true
         env:

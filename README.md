@@ -1,10 +1,6 @@
-<p align="center">
-  <a href="https://github.com/w-run/mimi-router"><img src="https://raw.githubusercontent.com/w-run/mimi-router/main/web/default/public/logo.png" width="150" height="150" alt="one-api logo"></a>
-</p>
-
 <div align="center">
 
-# One API · w-run 二次开发版
+# mimi-router
 
 _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
 
@@ -31,7 +27,7 @@ _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
 
 | 项目 | 内容 |
 |---|---|
-| 当前版本 | `1.1.0` |
+| 当前版本 | `1.2.0` |
 | 上游版本 | 基于 [songquanpeng/one-api](https://github.com/songquanpeng/one-api) |
 | 许可证 | MIT（保留原作者署名） |
 | 镜像仓库 | `wrundev/mimi-router`（Docker Hub）/ `ghcr.io/w-run/mimi-router`（GHCR） |
@@ -144,7 +140,7 @@ _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
 ```bash
 # 1. 克隆仓库
 git clone https://github.com/w-run/mimi-router.git
-cd one-api
+cd mimi-router
 
 # 2. 前端开发
 cd web/default
@@ -170,7 +166,7 @@ cd ..
 go build -trimpath \
   -ldflags "-s -w -X 'github.com/w-run/mimi-router/common.Version=$(cat VERSION)' \
            -linkmode external -extldflags '-static'" \
-  -o one-api
+  -o mimi-router
 ```
 
 ### Docker 镜像
@@ -180,18 +176,18 @@ go build -trimpath \
 docker pull wrundev/mimi-router
 
 # 运行（SQLite）
-docker run --name one-api -d --restart always \
+docker run --name mimi-router -d --restart always \
   -p 3000:3000 \
   -e TZ=Asia/Shanghai \
-  -v /home/ubuntu/data/one-api:/data \
+  -v /home/ubuntu/data/mimi-router:/data \
   wrundev/mimi-router
 
 # 运行（MySQL）
-docker run --name one-api -d --restart always \
+docker run --name mimi-router -d --restart always \
   -p 3000:3000 \
-  -e SQL_DSN="root:123456@tcp(localhost:3306)/oneapi" \
+  -e SQL_DSN="root:123456@tcp(localhost:3306)/mimirouter" \
   -e TZ=Asia/Shanghai \
-  -v /home/ubuntu/data/one-api:/data \
+  -v /home/ubuntu/data/mimi-router:/data \
   wrundev/mimi-router
 ```
 
@@ -202,7 +198,7 @@ docker run --name one-api -d --restart always \
 ## 项目结构
 
 ```
-one-api/
+mimi-router/
 ├── common/           # 公共模块（配置、数据库、工具等）
 ├── controller/       # HTTP 控制器
 ├── relay/            # 中继转发核心逻辑

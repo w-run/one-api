@@ -76,7 +76,7 @@ func (a *Adaptor) SetupRequestHeader(c *gin.Context, req *http.Request, meta *me
 	req.Header.Set("Authorization", "Bearer "+meta.APIKey)
 	if meta.ChannelType == channeltype.OpenRouter {
 		req.Header.Set("HTTP-Referer", "https://github.com/w-run/mimi-router")
-		req.Header.Set("X-Title", "One API")
+		req.Header.Set("X-Title", "mimi-router")
 	}
 	return nil
 }

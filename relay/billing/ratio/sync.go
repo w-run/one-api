@@ -98,7 +98,7 @@ func syncFromOpenRouter(models []openRouterModelItem) (int, error) {
 			avgPrice = (promptPrice + completionPrice) / 2
 		}
 
-		// Convert per-token USD to One API ratio
+		// Convert per-token USD to mimi-router ratio
 		// 1 ratio = $0.002 / 1K tokens
 		// price per 1K tokens = avgPrice * 1000
 		// ratio = (avgPrice * 1000) / 0.002

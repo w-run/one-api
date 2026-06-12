@@ -1,4 +1,4 @@
-# One API 的前端界面
+# mimi-router 的前端界面
 
 > 本仓库使用单一主题：default（基于 Berry 主题）
 

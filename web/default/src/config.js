@@ -1,6 +1,6 @@
 const config = {
   // basename: only at build time to set, and Don't add '/' at end off BASENAME for breadcrumbs, also Don't put only '/' use blank('') instead,
-  // like '/one-api/default'
+  // like '/mimirouter/default'
   basename: '/',
   defaultPath: '/panel/dashboard',
   fontFamily: `'Roboto', sans-serif, Helvetica, Arial, sans-serif`,
@@ -16,7 +16,7 @@ const config = {
     quota_per_unit: 500000,
     server_address: '',
     start_time: 0,
-    system_name: 'One API',
+    system_name: 'mimi-router',
     top_up_link: '',
     turnstile_check: false,
     turnstile_site_key: '',

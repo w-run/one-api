@@ -25,7 +25,7 @@ const BaseIndex = () => (
             lineHeight: 1.05
           }}
         >
-          One API
+          mimi-router
         </Typography>
         <Typography
           variant="h4"
