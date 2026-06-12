@@ -24,4 +24,7 @@ type Error struct {
 type ErrorWithStatusCode struct {
 	Error
 	StatusCode int `json:"status_code"`
+	// RetryAfter: 429 时从上游响应头 Retry-After 解析的秒数（0 表示未指定或非 429）。
+	// 由 RelayErrorHandler 填充，供回退引擎设置软禁用时长。
+	RetryAfter int `json:"retry_after,omitempty"`
 }

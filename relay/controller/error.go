@@ -3,12 +3,14 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/w-run/mimi-router/common/config"
-	"github.com/w-run/mimi-router/common/logger"
-	"github.com/w-run/mimi-router/relay/model"
 	"io"
 	"net/http"
 	"strconv"
+	"time"
+
+	"github.com/w-run/mimi-router/common/config"
+	"github.com/w-run/mimi-router/common/logger"
+	"github.com/w-run/mimi-router/relay/model"
 )
 
 type GeneralErrorResponse struct {
@@ -72,6 +74,10 @@ func RelayErrorHandler(resp *http.Response) (ErrorWithStatusCode *model.ErrorWit
 			Param:   strconv.Itoa(resp.StatusCode),
 		},
 	}
+	// 429 时抓取 Retry-After 头，供回退引擎设置软禁用时长
+	if resp.StatusCode == http.StatusTooManyRequests {
+		ErrorWithStatusCode.RetryAfter = parseRetryAfter(resp.Header.Get("Retry-After"))
+	}
 	responseBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return
@@ -98,4 +104,29 @@ func RelayErrorHandler(resp *http.Response) (ErrorWithStatusCode *model.ErrorWit
 		ErrorWithStatusCode.Error.Message = fmt.Sprintf("bad response status code %d", resp.StatusCode)
 	}
 	return
+}
+
+// parseRetryAfter: 解析 HTTP Retry-After 头。
+// 支持两种格式：
+//   - 整数秒（"30"）→ 返回 30
+//   - HTTP-date → 转为相对秒数（0 表示已过期或解析失败）
+func parseRetryAfter(value string) int {
+	if value == "" {
+		return 0
+	}
+	if seconds, err := strconv.Atoi(value); err == nil {
+		if seconds < 0 {
+			return 0
+		}
+		return seconds
+	}
+	t, err := http.ParseTime(value)
+	if err != nil {
+		return 0
+	}
+	diff := int(time.Until(t).Seconds())
+	if diff < 0 {
+		return 0
+	}
+	return diff
 }

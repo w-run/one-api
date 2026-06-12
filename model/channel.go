@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/w-run/mimi-router/common/config"
 	"github.com/w-run/mimi-router/common/helper"
@@ -38,6 +39,11 @@ type Channel struct {
 	Priority           *int64  `json:"priority" gorm:"bigint;default:0"`
 	Config             string  `json:"config"`
 	SystemPrompt       *string `json:"system_prompt" gorm:"type:text"`
+	// FallbackEnabled: 渠道是否参与回退队列。nil 视为 true。
+	FallbackEnabled *bool `json:"fallback_enabled" gorm:"default:true"`
+	// FallbackTriggers: 触发该渠道回退的错误类型，逗号分隔。
+	// 合法值: "429" / "5xx" / "timeout"。空 = 全匹配。
+	FallbackTriggers *string `json:"fallback_triggers" gorm:"type:varchar(64);default:''"`
 }
 
 type ChannelConfig struct {
@@ -122,6 +128,49 @@ func (channel *Channel) GetModelMapping() map[string]string {
 		return nil
 	}
 	return modelMapping
+}
+
+// GetFallbackEnabled: nil 视为 true（兼容老数据）
+func (channel *Channel) GetFallbackEnabled() bool {
+	if channel.FallbackEnabled == nil {
+		return true
+	}
+	return *channel.FallbackEnabled
+}
+
+// GetFallbackTriggers: 返回触发器列表。空 = 全匹配（返回 nil）。
+func (channel *Channel) GetFallbackTriggers() []string {
+	if channel.FallbackTriggers == nil {
+		return nil
+	}
+	raw := strings.TrimSpace(*channel.FallbackTriggers)
+	if raw == "" {
+		return nil
+	}
+	parts := strings.Split(raw, ",")
+	out := make([]string, 0, len(parts))
+	for _, p := range parts {
+		p = strings.TrimSpace(p)
+		if p != "" {
+			out = append(out, p)
+		}
+	}
+	return out
+}
+
+// TriggerMatch: 判断给定 trigger 是否命中该渠道的触发器集合。
+// 触发器集合为空时全匹配。
+func (channel *Channel) TriggerMatch(trigger string) bool {
+	triggers := channel.GetFallbackTriggers()
+	if len(triggers) == 0 {
+		return true
+	}
+	for _, t := range triggers {
+		if t == trigger {
+			return true
+		}
+	}
+	return false
 }
 
 func (channel *Channel) Insert() error {

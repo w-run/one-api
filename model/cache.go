@@ -213,6 +213,10 @@ func InitChannelCache() {
 	channelSyncLock.Lock()
 	group2model2channels = newGroup2model2channels
 	channelSyncLock.Unlock()
+	// 顺手清理过期的软禁用项，避免 sync.Map 无限增长
+	if n := CleanupExpiredSoftBan(); n > 0 {
+		logger.SysLog(fmt.Sprintf("cleaned %d expired soft-ban entries", n))
+	}
 	logger.SysLog("channels synced from database")
 }
 
@@ -231,15 +235,23 @@ func CacheGetRandomSatisfiedChannel(group string, model string, ignoreFirstPrior
 	channelSyncLock.RLock()
 	defer channelSyncLock.RUnlock()
 	channels := group2model2channels[group][model]
-	if len(channels) == 0 {
+	// 过滤软禁用中的渠道，避免限流中的渠道被再次选中
+	filtered := make([]*Channel, 0, len(channels))
+	for _, c := range channels {
+		if IsChannelSoftBanned(c.Id) {
+			continue
+		}
+		filtered = append(filtered, c)
+	}
+	if len(filtered) == 0 {
 		return nil, errors.New("channel not found")
 	}
-	endIdx := len(channels)
+	endIdx := len(filtered)
 	// choose by priority
-	firstChannel := channels[0]
+	firstChannel := filtered[0]
 	if firstChannel.GetPriority() > 0 {
-		for i := range channels {
-			if channels[i].GetPriority() != firstChannel.GetPriority() {
+		for i := range filtered {
+			if filtered[i].GetPriority() != firstChannel.GetPriority() {
 				endIdx = i
 				break
 			}
@@ -247,9 +259,56 @@ func CacheGetRandomSatisfiedChannel(group string, model string, ignoreFirstPrior
 	}
 	idx := rand.Intn(endIdx)
 	if ignoreFirstPriority {
-		if endIdx < len(channels) { // which means there are more than one priority
-			idx = random.RandRange(endIdx, len(channels))
+		if endIdx < len(filtered) { // which means there are more than one priority
+			idx = random.RandRange(endIdx, len(filtered))
 		}
 	}
-	return channels[idx], nil
+	return filtered[idx], nil
+}
+
+// CachePickFallbackChannel: 在指定 group/model 下，挑一个"可用作回退"的渠道。
+// 排除规则（按顺序）：
+//  1. excludeIDs：已尝试过的渠道
+//  2. 软禁用中的渠道
+//  3. fallback_enabled=false 的渠道（它们只做主选，不进回退池）
+// 剩余按 priority 降序，再在同优先级内随机。
+func CachePickFallbackChannel(group string, model string, excludeIDs []int) (*Channel, error) {
+	if !config.MemoryCacheEnabled {
+		return nil, errors.New("memory cache disabled")
+	}
+	channelSyncLock.RLock()
+	defer channelSyncLock.RUnlock()
+	channels := group2model2channels[group][model]
+	excluded := make(map[int]struct{}, len(excludeIDs))
+	for _, id := range excludeIDs {
+		excluded[id] = struct{}{}
+	}
+	filtered := make([]*Channel, 0, len(channels))
+	for _, c := range channels {
+		if _, used := excluded[c.Id]; used {
+			continue
+		}
+		if IsChannelSoftBanned(c.Id) {
+			continue
+		}
+		if !c.GetFallbackEnabled() {
+			continue
+		}
+		filtered = append(filtered, c)
+	}
+	if len(filtered) == 0 {
+		return nil, errors.New("no fallback channel available")
+	}
+	// 找最高优先级段的结尾
+	endIdx := len(filtered)
+	if filtered[0].GetPriority() > 0 {
+		for i := range filtered {
+			if filtered[i].GetPriority() != filtered[0].GetPriority() {
+				endIdx = i
+				break
+			}
+		}
+	}
+	idx := rand.Intn(endIdx)
+	return filtered[idx], nil
 }
