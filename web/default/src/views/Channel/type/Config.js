@@ -22,6 +22,8 @@ const defaultConfig = {
     model_mapping: '模型映射关系',
     system_prompt: '系统提示词',
     groups: '用户组',
+    fallback_enabled: '回退配置',
+    fallback_triggers: '回退触发器',
     config: null
   },
   prompt: {
@@ -35,6 +37,8 @@ const defaultConfig = {
       '请输入要修改的模型映射关系，格式为：api请求模型ID:实际转发给渠道的模型ID，使用JSON数组表示，例如：{"gpt-3.5": "gpt-35"}',
     system_prompt:"此项可选，用于强制设置给定的系统提示词，请配合自定义模型 & 模型重定向使用，首先创建一个唯一的自定义模型名称并在上面填入，之后将该自定义模型重定向映射到该渠道一个原生支持的模型此项可选，用于强制设置给定的系统提示词，请配合自定义模型 & 模型重定向使用，首先创建一个唯一的自定义模型名称并在上面填入，之后将该自定义模型重定向映射到该渠道一个原生支持的模型",
     groups: '请选择该渠道所支持的用户组',
+    fallback_enabled: '开启后，该渠道在调用出错时会作为同模型/同分组的回退目标',
+    fallback_triggers: '触发回退的错误类型，多个用英文逗号分隔。合法值：429、5xx、timeout。留空表示全匹配',
     config: null
   },
   modelGroup: 'openai'

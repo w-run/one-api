@@ -205,7 +205,7 @@ function getLineCardOption(lineDataGroup, field) {
       todayValue = renderNumber(todayValue);
       break;
     case 'Quota':
-      chartData = generateChartOptions(lineData, '美元');
+      chartData = generateChartOptions(lineData, '人民币');
       todayValue = '$' + renderNumber(todayValue);
       break;
     case 'PromptTokens':

@@ -5,10 +5,21 @@ export default function componentStyleOverrides(theme) {
       styleOverrides: {
         root: {
           fontWeight: 500,
-          borderRadius: '4px',
+          // 胶囊样式：borderRadius 大到接近高度即可
+          borderRadius: 999,
+          textTransform: 'none',
+          paddingLeft: 18,
+          paddingRight: 18,
           '&.Mui-disabled': {
             color: theme.colors?.grey600
           }
+        },
+        // 文本按钮/小尺寸按钮也用胶囊
+        outlined: {
+          borderRadius: 999
+        },
+        contained: {
+          borderRadius: 999
         }
       }
     },
@@ -43,6 +54,7 @@ export default function componentStyleOverrides(theme) {
       styleOverrides: {
         root: {
           color: theme.darkTextPrimary,
+          borderRadius: '50%',
           '&:hover': {
             backgroundColor: theme.colors?.grey200
           }
@@ -93,6 +105,9 @@ export default function componentStyleOverrides(theme) {
           color: theme.darkTextPrimary,
           paddingTop: '10px',
           paddingBottom: '10px',
+          // 胶囊导航项
+          borderRadius: 999,
+          marginBottom: 4,
           '&.Mui-selected': {
             color: theme.menuSelected,
             backgroundColor: theme.menuSelectedBack,

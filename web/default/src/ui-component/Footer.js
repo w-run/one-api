@@ -1,12 +1,15 @@
 // material-ui
-import { Link, Container, Box } from '@mui/material';
+import { Container, Box, Link } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-// ==============================|| FOOTER - AUTHENTICATION 2 & 3 ||============================== //
+// ==============================|| FOOTER ||============================== //
 
 const Footer = () => {
   const siteInfo = useSelector((state) => state.siteInfo);
+  const year = new Date().getFullYear();
+  const fromYear = 2025;
+  const yearRange = year > fromYear ? `${fromYear}-${year}` : `${fromYear}`;
 
   return (
     <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '64px' }}>
@@ -14,22 +17,13 @@ const Footer = () => {
         {siteInfo.footer_html ? (
           <div className="custom-footer" dangerouslySetInnerHTML={{ __html: siteInfo.footer_html }}></div>
         ) : (
-          <>            <Link href="https://github.com/w-run/mimi-router" target="_blank">
-              {siteInfo.system_name} v1.0.0{' '}
-            </Link>
-            由{' '}
-            <Link href="https://github.com/w-run" target="_blank">
+          <span>
+            ©{yearRange}{' '}
+            <Link href="https://github.com/w-run" target="_blank" underline="hover">
               W/Run
-            </Link>{' '}
-            二次开发 · 原版{' '}
-            <Link href="https://github.com/songquanpeng" target="_blank">
-              JustSong
-            </Link>{' '}
-            · 主题基于{' '}
-            <Link href="https://github.com/MartialBE" target="_blank">
-              MartialBE
-            </Link>{' '}，源代码遵循
-            <Link href="https://opensource.org/licenses/mit-license.php"> MIT 协议</Link></>
+            </Link>
+            .
+          </span>
         )}
       </Box>
     </Container>

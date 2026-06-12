@@ -18,7 +18,7 @@ var Footer = ""
 var Logo = ""
 var TopUpLink = ""
 var ChatLink = ""
-var QuotaPerUnit = 500 * 1000.0 // $0.002 / 1K tokens
+var QuotaPerUnit = 500 * 1000.0 // 500,000 quota = 1 元（人民币），即 1 quota = 0.000002 元 ≈ 0.0000144 元 / 1K tokens
 var DisplayInCurrencyEnabled = true
 var DisplayTokenStatEnabled = true
 

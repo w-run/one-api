@@ -66,7 +66,7 @@ func Relay(c *gin.Context) {
 	// 分类错误：429 / 5xx / 网络层错误
 	trigger := fallback.ClassifyError(bizErr.StatusCode, nil)
 	// 收到 429 且上游给出 Retry-After 时，软禁用该渠道
-	fallback.SoftBanFromError(ctx, channelId, bizErr)
+	fallback.SoftBanFromError(ctx, channelId, channelName, bizErr)
 
 	if trigger == "" {
 		logger.Errorf(ctx, "non-retryable error (status %d): %s", bizErr.StatusCode, bizErr.Error.Message)
@@ -77,7 +77,7 @@ func Relay(c *gin.Context) {
 	// 询问当前渠道：是否允许回退
 	currentChannel, _ := dbmodel.GetChannelById(channelId, false)
 	if !fallback.ShouldFallback(currentChannel, trigger) {
-		logger.Errorf(ctx, "channel #%d not configured to fallback on %s", channelId, trigger)
+		logger.Errorf(ctx, "channel #%d (%s) not configured to fallback on %s", channelId, currentChannel.Name, trigger)
 		writeRelayError(c, bizErr, requestId)
 		return
 	}
@@ -95,7 +95,7 @@ func Relay(c *gin.Context) {
 			logger.Errorf(ctx, "CachePickFallbackChannel failed: %+v", err)
 			break
 		}
-		logger.Infof(ctx, "fallback to channel #%d (remain times %d, trigger %s)", channel.Id, i, trigger)
+		logger.Infof(ctx, "fallback to channel #%d (%s) (remain times %d, trigger %s)", channel.Id, channel.Name, i, trigger)
 		middleware.SetupContextForSelectedChannel(c, channel, originalModel)
 		requestBody, err := common.GetRequestBody(c)
 		if err != nil {
@@ -114,9 +114,9 @@ func Relay(c *gin.Context) {
 
 		// 处理新一轮失败的软禁用；遇到不可重试错误立即终止
 		newTrigger := fallback.ClassifyError(bizErr.StatusCode, nil)
-		fallback.SoftBanFromError(ctx, channelId, bizErr)
+		fallback.SoftBanFromError(ctx, channelId, channelName, bizErr)
 		if newTrigger == "" {
-			logger.Errorf(ctx, "non-retryable error in fallback (status %d)", bizErr.StatusCode)
+			logger.Errorf(ctx, "channel #%d (%s) non-retryable error in fallback (status %d)", channelId, channelName, bizErr.StatusCode)
 			break
 		}
 	}
@@ -157,7 +157,7 @@ func shouldRetry(c *gin.Context, statusCode int) bool {
 }
 
 func processChannelRelayError(ctx context.Context, userId int, channelId int, channelName string, err *model.ErrorWithStatusCode) {
-	logger.Errorf(ctx, "relay error (channel id %d, user id: %d): %s", channelId, userId, err.Message)
+	logger.Errorf(ctx, "relay error (channel #%d %s, user id: %d): %s", channelId, channelName, userId, err.Message)
 	// https://platform.openai.com/docs/guides/error-codes/api-errors
 	if monitor.ShouldDisableChannel(&err.Error, err.StatusCode) {
 		monitor.DisableChannel(channelId, channelName, err.Message)

@@ -367,6 +367,8 @@ const EditModal = ({ open, channelId, onCancel, onOk }) => {
         data.config = JSON.parse(data.config);
       }
 
+      data.fallback_enabled = data.fallback_enabled !== false;
+      data.fallback_triggers = data.fallback_triggers || '';
       data.base_url = data.base_url ?? '';
       data.is_edit = true;
       initChannel(data.type);
@@ -782,6 +784,34 @@ const EditModal = ({ open, channelId, onCancel, onOk }) => {
                   <FormHelperText id="helper-tex-channel-system_prompt-label"> {inputPrompt.system_prompt} </FormHelperText>
                 )}
               </FormControl>
+
+              <FormControlLabel
+                sx={{ mt: 1, mb: 0 }}
+                control={
+                  <Switch
+                    checked={values.fallback_enabled}
+                    onChange={(e) => setFieldValue('fallback_enabled', e.target.checked)}
+                    name="fallback_enabled"
+                  />
+                }
+                label={inputLabel.fallback_enabled}
+              />
+              <FormHelperText sx={{ mt: 0, mb: 1 }}>{inputPrompt.fallback_enabled}</FormHelperText>
+
+              <FormControl fullWidth sx={{ ...theme.typography.otherInput }}>
+                <TextField
+                  id="channel-fallback_triggers-label"
+                  label={inputLabel.fallback_triggers}
+                  value={values.fallback_triggers || ''}
+                  name="fallback_triggers"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  placeholder="429,5xx,timeout"
+                  aria-describedby="helper-text-channel-fallback_triggers-label"
+                />
+                <FormHelperText id="helper-tex-channel-fallback_triggers-label">{inputPrompt.fallback_triggers}</FormHelperText>
+              </FormControl>
+
               <DialogActions>
                 <Button onClick={onCancel}>取消</Button>
                 <Button disableElevation disabled={isSubmitting} type="submit" variant="contained" color="primary">
