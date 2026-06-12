@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/w-run/mimi-router/common"
@@ -18,6 +19,7 @@ import (
 	"github.com/w-run/mimi-router/monitor"
 	"github.com/w-run/mimi-router/relay/controller"
 	"github.com/w-run/mimi-router/relay/fallback"
+	affinitymod "github.com/w-run/mimi-router/relay/affinity"
 	anthropicmod "github.com/w-run/mimi-router/relay/relaymode/anthropic"
 	"github.com/w-run/mimi-router/relay/model"
 	"github.com/w-run/mimi-router/relay/relaymode"
@@ -57,21 +59,25 @@ func Relay(c *gin.Context) {
 	}
 	channelId := c.GetInt(ctxkey.ChannelId)
 	userId := c.GetInt(ctxkey.Id)
+	group := c.GetString(ctxkey.Group)
+	originalModel := c.GetString(ctxkey.OriginalModel)
 	bizErr := relayHelper(c, relayMode)
 	if bizErr == nil {
 		monitor.Emit(channelId, true)
+		// 记录渠道亲和性
+		recordAffinity(c, channelId, group, originalModel)
 		return
 	}
+	// 首选渠道失败，清除该用户+模型的亲和性
+	clearAffinity(c, group, originalModel)
 	channelName := c.GetString(ctxkey.ChannelName)
-	group := c.GetString(ctxkey.Group)
-	originalModel := c.GetString(ctxkey.OriginalModel)
 	go processChannelRelayError(ctx, userId, channelId, channelName, bizErr)
 	requestId := c.GetString(helper.RequestIdKey)
 
 	// 分类错误：429 / 5xx / 网络层错误
 	trigger := fallback.ClassifyError(bizErr.StatusCode, nil)
-	// 收到 429 且上游给出 Retry-After 时，软禁用该渠道
-	fallback.SoftBanFromError(ctx, channelId, channelName, bizErr)
+	// 收到 429 且上游给出 Retry-After 时，冷却该渠道（按 channel:model 粒度）
+	fallback.SoftBanFromError(ctx, channelId, channelName, originalModel, bizErr)
 
 	if trigger == "" {
 		logger.Errorf(ctx, "non-retryable error (status %d): %s", bizErr.StatusCode, bizErr.Error.Message)
@@ -92,10 +98,21 @@ func Relay(c *gin.Context) {
 		writeRelayError(c, bizErr, requestId)
 		return
 	}
-
+	backupGroup := c.GetString(ctxkey.BackupGroup)
 	usedIDs := []int{channelId}
+	deadline := time.Now().Add(time.Duration(config.RetryTimeOutSeconds) * time.Second)
 	for i := retryTimes; i > 0; i-- {
+		// 超时保护：总回退时间超过配置上限，直接返回错误
+		if time.Now().After(deadline) {
+			logger.Errorf(ctx, "fallback retry timeout after %ds", config.RetryTimeOutSeconds)
+			break
+		}
 		channel, err := dbmodel.CachePickFallbackChannel(group, originalModel, usedIDs)
+		// 主分组无可用渠道，尝试备用分组
+		if err != nil && backupGroup != "" {
+			logger.Infof(ctx, "primary group %s exhausted, trying backup group %s", group, backupGroup)
+			channel, err = dbmodel.CachePickFallbackChannel(backupGroup, originalModel, usedIDs)
+		}
 		if err != nil {
 			logger.Errorf(ctx, "CachePickFallbackChannel failed: %+v", err)
 			break
@@ -117,9 +134,9 @@ func Relay(c *gin.Context) {
 		usedIDs = append(usedIDs, channelId)
 		go processChannelRelayError(ctx, userId, channelId, channelName, bizErr)
 
-		// 处理新一轮失败的软禁用；遇到不可重试错误立即终止
+		// 处理新一轮失败的冷却；遇到不可重试错误立即终止
 		newTrigger := fallback.ClassifyError(bizErr.StatusCode, nil)
-		fallback.SoftBanFromError(ctx, channelId, channelName, bizErr)
+		fallback.SoftBanFromError(ctx, channelId, channelName, originalModel, bizErr)
 		if newTrigger == "" {
 			logger.Errorf(ctx, "channel #%d (%s) non-retryable error in fallback (status %d)", channelId, channelName, bizErr.StatusCode)
 			break
@@ -176,6 +193,25 @@ func processChannelRelayError(ctx context.Context, userId int, channelId int, ch
 	} else {
 		monitor.Emit(channelId, false)
 	}
+}
+
+// recordAffinity 在请求成功后记录渠道亲和性。
+func recordAffinity(c *gin.Context, channelId int, group string, modelName string) {
+	tokenId := c.GetInt(ctxkey.TokenId)
+	if tokenId == 0 {
+		return
+	}
+	key := affinitymod.Key(tokenId, group, modelName)
+	affinitymod.Set(key, channelId, 0) // 0 = 使用默认 TTL
+}
+
+// clearAffinity 在请求失败后清除该用户+模型的亲和性缓存。
+func clearAffinity(c *gin.Context, group string, modelName string) {
+	tokenId := c.GetInt(ctxkey.TokenId)
+	if tokenId == 0 {
+		return
+	}
+	affinitymod.Delete(affinitymod.Key(tokenId, group, modelName))
 }
 
 func RelayNotImplemented(c *gin.Context) {

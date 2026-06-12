@@ -98,7 +98,10 @@ var AutomaticEnableChannelEnabled = false
 var QuotaRemindThreshold int64 = 1000
 var PreConsumedQuota int64 = 500
 var ApproximateTokenEnabled = false
-var RetryTimes = 0
+var RetryTimes = 2 // 默认允许 2 次回退重试（v1.5.0 起从 0 改为 2）
+var RetryTimeOutSeconds = 30 // 回退总超时（秒），超过后不再重试直接返回错误
+var ChannelAffinityTTL = 300 // 渠道亲和性缓存 TTL（秒），默认 5 分钟
+var CleanupAffinityIntervalSeconds = 600 // 亲和性过期清理间隔（秒），默认 10 分钟
 
 var RootUserEmail = ""
 

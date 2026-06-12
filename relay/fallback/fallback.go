@@ -73,21 +73,22 @@ func ExtractRetryAfter(bizErr *relaymodel.ErrorWithStatusCode) (int, bool) {
 	return bizErr.RetryAfter, true
 }
 
-// SoftBanFromError: 收到 429 错误后做软禁用动作。
-// 仅在上游明确给出 Retry-After 时启用；未给时不软禁（避免误伤）。
-// channelName 仅用于日志展示，可为空。
-func SoftBanFromError(ctx context.Context, channelId int, channelName string, bizErr *relaymodel.ErrorWithStatusCode) {
+// SoftBanFromError: 收到 429 错误后做冷却动作（按 channel:model 粒度）。
+// 仅在上游明确给出 Retry-After 时启用；未给时不冷却（避免误伤）。
+// channelName / modelName 仅用于日志展示，可为空。
+func SoftBanFromError(ctx context.Context, channelId int, channelName string, modelName string, bizErr *relaymodel.ErrorWithStatusCode) {
 	seconds, ok := ExtractRetryAfter(bizErr)
 	if !ok {
 		return
 	}
 	until := time.Now().Unix() + int64(seconds)
-	model.SoftBanChannel(channelId, until)
+	model.SoftBanChannel(channelId, until) // 向后兼容整渠道
+	model.CooldownChannelForModel(channelId, modelName, until)
 	nameTag := channelName
 	if nameTag == "" {
 		nameTag = "未命名"
 	}
-	logger.Debugf(ctx, "channel #%d (%s) soft-banned for %ds (until %d)", channelId, nameTag, seconds, until)
+	logger.Infof(ctx, "channel #%d (%s) model=%s cooldown %ds (until %d)", channelId, nameTag, modelName, seconds, until)
 }
 
 // ParseRetryAfter: 解析 HTTP Retry-After 头的整数值。

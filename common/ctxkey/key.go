@@ -13,6 +13,7 @@ const (
 	ConvertedRequest  = "converted_request"
 	OriginalModel     = "original_model"
 	Group             = "group"
+	BackupGroup       = "backup_group"
 	ModelMapping      = "model_mapping"
 	ChannelName       = "channel_name"
 	TokenId           = "token_id"

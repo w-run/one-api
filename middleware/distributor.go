@@ -10,6 +10,7 @@ import (
 	"github.com/w-run/mimi-router/common/ctxkey"
 	"github.com/w-run/mimi-router/common/logger"
 	"github.com/w-run/mimi-router/model"
+	"github.com/w-run/mimi-router/relay/affinity"
 	"github.com/w-run/mimi-router/relay/channeltype"
 )
 
@@ -21,8 +22,9 @@ func Distribute() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 		userId := c.GetInt(ctxkey.Id)
-		userGroup, _ := model.CacheGetUserGroup(userId)
+		userGroup, backupGroup, _ := model.CacheGetUserGroupWithBackup(userId)
 		c.Set(ctxkey.Group, userGroup)
+		c.Set(ctxkey.BackupGroup, backupGroup)
 		var requestModel string
 		var channel *model.Channel
 		channelId, ok := c.Get(ctxkey.SpecificChannelId)
@@ -44,7 +46,22 @@ func Distribute() func(c *gin.Context) {
 		} else {
 			requestModel = c.GetString(ctxkey.RequestModel)
 			var err error
-			channel, err = model.CacheGetRandomSatisfiedChannel(userGroup, requestModel, false)
+			// 渠道亲和性：先查上次该用户+模型成功的渠道
+			tokenId := c.GetInt(ctxkey.TokenId)
+			affinityKey := affinity.Key(tokenId, userGroup, requestModel)
+			if hitId, ok := affinity.Get(affinityKey); ok {
+				affCh, e := model.GetChannelById(hitId, true)
+				if e == nil && affCh.Status == model.ChannelStatusEnabled && !model.IsChannelModelCooldown(hitId, requestModel) {
+					logger.Debugf(ctx, "affinity hit: channel #%d for model %s", hitId, requestModel)
+					channel = affCh
+				} else {
+					// 亲和渠道不可用，清除
+					affinity.Delete(affinityKey)
+				}
+			}
+			if channel == nil {
+				channel, err = model.CacheGetRandomSatisfiedChannel(userGroup, requestModel, false)
+			}
 			if err != nil {
 				message := fmt.Sprintf("当前分组 %s 下对于模型 %s 无可用渠道", userGroup, requestModel)
 				if channel != nil {

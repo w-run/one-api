@@ -9,6 +9,7 @@ import (
 	"github.com/w-run/mimi-router/common/config"
 	"github.com/w-run/mimi-router/common/logger"
 	"github.com/w-run/mimi-router/common/random"
+	"github.com/w-run/mimi-router/relay/affinity"
 	"math/rand"
 	"sort"
 	"strconv"
@@ -71,6 +72,41 @@ func CacheGetUserGroup(id int) (group string, err error) {
 		}
 	}
 	return group, err
+}
+
+// CacheGetUserGroupWithBackup 同时返回主分组和备用分组。
+// 备用分组为空字符串表示无备用。
+func CacheGetUserGroupWithBackup(id int) (group string, backupGroup string, err error) {
+	if !common.RedisEnabled {
+		u, e := GetUserById(id, false)
+		if e != nil {
+			return "", "", e
+		}
+		return u.Group, u.BackupGroup, nil
+	}
+	// 先查 group
+	group, err = common.RedisGet(fmt.Sprintf("user_group:%d", id))
+	if err != nil {
+		u, e := GetUserById(id, false)
+		if e != nil {
+			return "", "", e
+		}
+		group = u.Group
+		backupGroup = u.BackupGroup
+		_ = common.RedisSet(fmt.Sprintf("user_group:%d", id), group, time.Duration(UserId2GroupCacheSeconds)*time.Second)
+		_ = common.RedisSet(fmt.Sprintf("user_backup_group:%d", id), backupGroup, time.Duration(UserId2GroupCacheSeconds)*time.Second)
+		return group, backupGroup, nil
+	}
+	backupGroup, err = common.RedisGet(fmt.Sprintf("user_backup_group:%d", id))
+	if err != nil {
+		u, e := GetUserById(id, false)
+		if e != nil {
+			return group, "", e
+		}
+		backupGroup = u.BackupGroup
+		_ = common.RedisSet(fmt.Sprintf("user_backup_group:%d", id), backupGroup, time.Duration(UserId2GroupCacheSeconds)*time.Second)
+	}
+	return group, backupGroup, nil
 }
 
 func fetchAndUpdateUserQuota(ctx context.Context, id int) (quota int64, err error) {
@@ -214,8 +250,11 @@ func InitChannelCache() {
 	group2model2channels = newGroup2model2channels
 	channelSyncLock.Unlock()
 	// 顺手清理过期的软禁用项，避免 sync.Map 无限增长
-	if n := CleanupExpiredSoftBan(); n > 0 {
+	if n := CleanupExpiredCooldown(); n > 0 {
 		logger.SysLog(fmt.Sprintf("cleaned %d expired soft-ban entries", n))
+	}
+	if n := CleanupExpiredAffinity(); n > 0 {
+		logger.SysLog(fmt.Sprintf("cleaned %d expired affinity entries", n))
 	}
 	logger.SysLog("channels synced from database")
 }
@@ -235,10 +274,10 @@ func CacheGetRandomSatisfiedChannel(group string, model string, ignoreFirstPrior
 	channelSyncLock.RLock()
 	defer channelSyncLock.RUnlock()
 	channels := group2model2channels[group][model]
-	// 过滤软禁用中的渠道，避免限流中的渠道被再次选中
+	// 过滤冷却中的渠道（按 channel:model 粒度），避免限流中被再次选中
 	filtered := make([]*Channel, 0, len(channels))
 	for _, c := range channels {
-		if IsChannelSoftBanned(c.Id) {
+		if IsChannelModelCooldown(c.Id, model) {
 			continue
 		}
 		filtered = append(filtered, c)
@@ -288,7 +327,7 @@ func CachePickFallbackChannel(group string, model string, excludeIDs []int) (*Ch
 		if _, used := excluded[c.Id]; used {
 			continue
 		}
-		if IsChannelSoftBanned(c.Id) {
+		if IsChannelModelCooldown(c.Id, model) {
 			continue
 		}
 		if !c.GetFallbackEnabled() {
@@ -311,4 +350,9 @@ func CachePickFallbackChannel(group string, model string, excludeIDs []int) (*Ch
 	}
 	idx := rand.Intn(endIdx)
 	return filtered[idx], nil
+}
+
+// CleanupExpiredAffinity 委托 affinity 包清理过期的亲和性条目。
+func CleanupExpiredAffinity() int {
+	return affinity.Cleanup()
 }

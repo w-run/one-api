@@ -49,7 +49,10 @@ type User struct {
 	UsedQuota        int64  `json:"used_quota" gorm:"bigint;default:0;column:used_quota"` // used quota
 	RequestCount     int    `json:"request_count" gorm:"type:int;default:0;"`             // request number
 	Group            string `json:"group" gorm:"type:varchar(32);default:'default'"`
-	AffCode          string `json:"aff_code" gorm:"type:varchar(32);column:aff_code;uniqueIndex"`
+	// BackupGroup: 主分组渠道全部不可用时，回退到备用分组。
+	// 空字符串表示无备用分组。仅对回退选渠道生效，不影响首次主选。
+	BackupGroup string `json:"backup_group" gorm:"type:varchar(32);default:''"`
+	AffCode     string `json:"aff_code" gorm:"type:varchar(32);column:aff_code;uniqueIndex"`
 	InviterId        int    `json:"inviter_id" gorm:"type:int;column:inviter_id;index"`
 }
 

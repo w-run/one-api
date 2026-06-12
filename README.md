@@ -27,7 +27,7 @@ _✨ 基于标准 OpenAI API 格式访问所有大模型的开源 AI 网关 ✨_
 
 | 项目 | 内容 |
 |---|---|
-| 当前版本 | `1.4.0` |
+| 当前版本 | `1.5.0` |
 | 上游版本 | 基于 [songquanpeng/one-api](https://github.com/songquanpeng/one-api) |
 | 许可证 | MIT（保留原作者署名） |
 | 镜像仓库 | `wrundev/mimi-router`（Docker Hub）/ `ghcr.io/w-run/mimi-router`（GHCR） |
@@ -163,6 +163,25 @@ curl -X POST https://your-mimi-router/v1/messages \
     "messages": [{"role":"user","content":"Hello"}]
   }'
 ```
+
+---
+
+### 7. 回退机制增强（v1.5.0）
+- **冷却粒度细化**：从整渠道冷却改为 `channel:model` 粒度。渠道 X 在 gpt-4o 上收到 429，只冻结 gpt-4o，不影响 claude-3 等其他模型
+- **备用分组**：`User.backup_group` 字段。主分组渠道全部不可用时，自动回退到备用分组
+- **渠道亲和性**（sticky channel）：记住用户+模型上次成功的渠道，TTL 内优先复用。避免无意义跨渠道跳转引入的延迟抖动和上游 cold-start 压力
+- **回退超时保护**：`RetryTimeOutSeconds` 配置（默认 30s），超过总回退时间直接返回错误，避免流式请求卡死
+- 默认 `RetryTimes` 从 0 改为 2，生产环境默认开启回退
+- 新增 `config.ChannelAffinityTTL`（默认 300s）和 `config.CleanupAffinityIntervalSeconds`（默认 600s）
+- 旧 `softban.go` 合并入 `cooldown.go`，API 向后兼容
+
+**配置项**：
+
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| `RETRY_TIMES` | `2` | 回退重试次数 |
+| `RETRY_TIMEOUT_SECONDS` | `30` | 回退超时（秒） |
+| `CHANNEL_AFFINITY_TTL` | `300` | 亲和性缓存 TTL（秒） |
 
 ---
 
